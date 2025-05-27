@@ -1,0 +1,191 @@
+.about {
+  &__section {
+    padding: $spacer-5 0;
+  }
+  
+  &__title {
+    @include heading-2;
+    margin-bottom: $spacer-4;
+  }
+  
+  &__content {
+    color: var(--text-color);
+  }
+  
+  &__image {
+    border-radius: $border-radius-lg;
+    overflow: hidden;
+    
+    img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+      
+      &:hover {
+        transform: scale(1.03);
+      }
+    }
+  }
+  
+  &__card {
+    background-color: var(--bg-light);
+    border-radius: $border-radius-lg;
+    padding: $spacer-4;
+    @include box-shadow(1);
+    height: 100%;
+    
+    &-icon {
+      width: 4rem;
+      height: 4rem;
+      background-color: rgba(59, 130, 246, 0.1);
+      color: var(--primary-color);
+      border-radius: 50%;
+      @include flex-center;
+      margin-bottom: $spacer-4;
+    }
+    
+    &-title {
+      font-size: $font-size-xl;
+      font-weight: 600;
+      margin-bottom: $spacer-2;
+    }
+    
+    &-content {
+      color: var(--secondary-color);
+    }
+  }
+  
+  &__team-member {
+    background-color: var(--bg-light);
+    border-radius: $border-radius-lg;
+    overflow: hidden;
+    @include box-shadow(1);
+    transition: transform 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-5px);
+      @include box-shadow(2);
+    }
+    
+    &-image {
+      position: relative;
+      aspect-ratio: 1 / 1;
+    }
+    
+    &-info {
+      padding: $spacer-4;
+    }
+    
+    &-name {
+      font-size: $font-size-xl;
+      font-weight: 600;
+      margin-bottom: $spacer-1;
+    }
+    
+    &-role {
+      color: var(--primary-color);
+      margin-bottom: $spacer-3;
+    }
+    
+    &-bio {
+      color: var(--secondary-color);
+    }
+  }
+  
+  &__cta {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    padding: $spacer-5 0;
+    text-align: center;
+    
+    &-title {
+      @include heading-2;
+      margin-bottom: $spacer-3;
+    }
+    
+    &-description {
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 36rem;
+      margin: 0 auto $spacer-4;
+    }
+    
+    &-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: $spacer-2;
+      justify-content: center;
+      
+      @include sm {
+        flex-direction: row;
+      }
+    }
+  }
+}
+
+// Mission ve Aims için liste stilleri
+.mission-content, .aims-content {
+  ul, ol, menu {
+    padding-left: 1.5rem !important;
+    margin-bottom: 1rem;
+    list-style-position: outside !important;
+  }
+  
+  /* Başka CSS kurallarını geçersiz kılmak için daha yüksek özgüllük */
+  ul:not([class*="prose"]), 
+  .prose ul,
+  ul {
+    list-style-type: disc !important;
+    list-style-position: outside !important;
+    
+    li {
+      display: list-item !important;
+      margin-bottom: 0.5rem;
+    }
+    
+    // İç içe geçmiş ul
+    ul {
+      list-style-type: circle !important;
+      margin-top: 0.5rem;
+    }
+    
+    // İç içe geçmiş ol
+    ol {
+      list-style-type: decimal !important;
+      margin-top: 0.5rem;
+      
+      li {
+        display: list-item !important;
+      }
+    }
+  }
+  
+  /* Başka CSS kurallarını geçersiz kılmak için daha yüksek özgüllük */
+  ol:not([class*="prose"]), 
+  .prose ol,
+  ol {
+    list-style-type: decimal !important;
+    list-style-position: outside !important;
+    
+    li {
+      display: list-item !important;
+      margin-bottom: 0.5rem;
+    }
+    
+    // İç içe geçmiş ol
+    ol {
+      list-style-type: lower-alpha !important;
+      margin-top: 0.5rem;
+    }
+    
+    // İç içe geçmiş ul
+    ul {
+      list-style-type: disc !important;
+      margin-top: 0.5rem;
+      
+      li {
+        display: list-item !important;
+      }
+    }
+  }
+} 

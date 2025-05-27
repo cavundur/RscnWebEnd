@@ -1,0 +1,292 @@
+// Spacing değişkenleri (Sass'da kalabilir - statik değerler)
+$spacer: 1rem;
+$spacer-1: 0.25rem;
+$spacer-2: 0.5rem;
+$spacer-3: 0.75rem;
+$spacer-4: 1.5rem;
+$spacer-5: 2rem;
+$spacer-6: 3rem;
+
+// Font size değişkenleri (Sass'da kalabilir - statik değerler)
+$font-size-lg: 1rem;
+$font-size-xl: 1.25rem;
+
+// Mixin tanımları
+@mixin md {
+  @media (min-width: 768px) {
+    @content;
+  }
+}
+
+@mixin heading-1 {
+  font-size: 2.5rem;
+  line-height: 1.2;
+  font-weight: 700;
+  
+  @include md {
+    font-size: 3rem;
+  }
+}
+
+.homeHeader {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  .homeImageContainer {
+    height: 55vh;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    z-index: 1;
+    
+    .overlay {
+      background: linear-gradient(to bottom, var(--navy-color), color-mix(in srgb, var(--navy-color) 10%, transparent));
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+    }
+  }
+
+  .homeContentWrapper {
+    flex: 1;
+    background-color: var(--napoli-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacer-5;
+    position: relative;
+    flex-direction: column;
+    z-index: 3;
+
+    .homeContentSocial {
+      position: absolute;
+      bottom: 2rem;
+      left: 0;
+      z-index: 4;
+      background-color: var(--theme-primary-light);
+      align-items: center;
+      padding: 1rem;
+      pointer-events: auto;
+    
+      > div {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+        pointer-events: auto;
+    
+        a {
+          color: var(--navy-color);
+          font-size: 1.5rem;
+          opacity: 0.8;
+          transition: opacity 0.2s, transform 0.2s;
+          text-decoration: none;
+          pointer-events: auto;
+    
+          &:hover {
+            opacity: 1;
+            transform: scale(1.1);
+            color: var(--napoli-blue);
+          }
+    
+          span {
+            font-family: 'rscn-font' !important;
+            font-style: normal;
+            font-weight: normal;
+            speak: never;
+            display: inline-block;
+            text-decoration: inherit;
+            text-align: center;
+            font-size: inherit;
+            line-height: 1;
+          }
+        }
+      }
+    }
+    
+    .titleContainer {
+      max-width: 800px;
+      text-align: center;
+      position: relative;
+      z-index: 4;
+      pointer-events: auto;
+
+      .title {
+        font-size: 2.5rem;
+        line-height: 1.1;
+        margin-bottom: $spacer-3;
+        color: var(--text-light);
+        font-weight: 300;
+        @include md {
+          font-size: 3rem;
+          font-weight: 300;
+        }
+      }
+      .description {
+        font-size: $font-size-xl;
+        margin: 0 auto;
+        color: var(--theme-primary-light-text);
+        line-height: 1.2;
+        margin-bottom: $spacer-6;
+        display: block;
+        
+        @include md { font-size: 1.5rem; }
+        
+        p {
+          margin-bottom: 0.5rem;
+          color: var(--text-light);
+        }
+        
+        ul, ol {
+          margin-left: 1.5rem;
+          margin-bottom: 0.5rem;
+          color: var(--text-light);
+        }
+        
+        a {
+          color: var(--theme-primary-light);
+          text-decoration: underline;
+          
+          &:hover {
+            color: var(--text-light);
+          }
+        }
+      }
+    }
+  }
+
+  .homeContentSlogan {
+    margin-top: $spacer-4;
+    text-align: left;
+    max-width: 800px;
+    width: 100%;
+
+    > div {
+      display: flex;
+
+      img {
+        height: 4rem;
+        width: auto;
+      }
+    }
+
+    .slogan-image {
+      max-width: 300px;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    .slogan-text {
+      h2 {
+        font-size: 2.5rem;
+        font-weight: 300;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-light);
+        margin: 0;
+        line-height: 1.2;
+      }
+    }
+  }
+}
+
+.pageHeader {
+  position: relative;
+  width: 100%;
+  
+  .pageImageContainer {
+    position: relative;
+    width: 100%;
+    max-height: 300px;
+    min-height: 250px;
+    overflow: hidden;
+    
+    .overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 1;
+      background: linear-gradient(to bottom, var(--navy-color), color-mix(in srgb, var(--napoli-blue) 20%, transparent));
+      pointer-events: none;
+    }
+    
+    .image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+    }
+  }
+  
+  .pageContentWrapper {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    margin-top: -50px;
+    
+    .titleContainer {
+      margin-bottom: 1rem;
+      .titleSection {
+        margin-top: 0;
+      }
+      .title {
+        @include heading-1;
+        color: #fff;
+        margin-bottom: $spacer;
+      }
+      .description {
+        font-size: $font-size-lg;
+        max-width: 48rem;
+        color: #fff;
+        //color: var(--napoli-blue);
+        display: block;
+        //margin-bottom: 1rem;
+        line-height: 1.2;
+        
+        @include md { 
+          font-size: $font-size-xl;
+          line-height: 1.2;
+        }
+        
+        p {
+          margin-bottom: 0.5rem;
+          color: var(--theme-primary-light);
+        }
+        
+        ul, ol {
+          margin-left: 1.5rem;
+          margin-bottom: 0.5rem;
+        }
+        
+        a {
+          color: var(--theme-primary);
+          text-decoration: underline;
+          
+          &:hover {
+            color: var(--theme-primary-hover);
+          }
+        }
+      }
+    }
+    
+    .pageContent {
+      background-color: var(--bg-light);
+      height: auto;
+      padding: $spacer-2 0;
+    }
+  }
+}
+
+.centeredTitle {
+  max-width: 4xl;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+} 

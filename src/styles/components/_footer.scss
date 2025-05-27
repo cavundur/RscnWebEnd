@@ -1,0 +1,106 @@
+.site-footer {
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  padding: $spacer-5 0;
+  
+  &__container {
+    @include container;
+  }
+  
+  &__top {
+    display: flex;
+    flex-direction: column;
+    gap: $spacer-4;
+    padding-bottom: $spacer-4;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    
+    @include md {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+  
+  &__info {
+    max-width: 400px;
+  }
+  
+  &__logo {
+    font-size: $font-size-xl;
+    font-weight: 700;
+    color: var(--text-light);
+    margin-bottom: $spacer-3;
+  }
+  
+  &__description {
+    font-size: $font-size-sm;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: $spacer-3;
+  }
+  
+  &__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacer-4;
+  }
+  
+  &__nav-group {
+    min-width: 160px;
+    
+    &-title {
+      font-weight: 600;
+      margin-bottom: $spacer-3;
+      color: var(--text-light);
+    }
+    
+    &-items {
+      display: flex;
+      flex-direction: column;
+      gap: $spacer-2;
+    }
+    
+    &-item {
+      font-size: $font-size-sm;
+      color: rgba(255, 255, 255, 0.7);
+      transition: color 0.2s ease;
+      
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+  }
+  
+  &__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: $spacer-3;
+    padding-top: $spacer-4;
+    
+    @include md {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+  
+  &__copyright {
+    font-size: $font-size-xs;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  
+  &__social {
+    display: flex;
+    gap: $spacer-3;
+    
+    &-item {
+      width: 32px;
+      height: 32px;
+      @include flex(row, center, center);
+      color: rgba(255, 255, 255, 0.7);
+      transition: color 0.2s ease;
+      
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+  }
+} 

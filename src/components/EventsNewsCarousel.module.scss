@@ -1,0 +1,30 @@
+.carouselCard {
+  background-color: var(--section-card-color);
+  box-shadow: none;
+  border: none;
+  gap: 0;
+  padding: 2rem 1rem;
+
+  .cardDate {
+    color: var(--napoli-blue);
+    margin-right: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .cardTypeSeparator {
+    color: var(--napoli-blue)
+  }
+
+  .cardType {
+    //color: var(--navy-color);
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+  }
+
+  .cardTitle {
+    color: var(--navy-color);
+    font-size: 1.4rem;
+    line-height: 1.2;
+    font-weight: 400;
+  }
+}

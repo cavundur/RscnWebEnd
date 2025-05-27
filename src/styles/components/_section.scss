@@ -1,0 +1,72 @@
+// Section bileşenleri için stiller
+
+.section {
+  position: relative;
+  width: 100%;
+  
+  // İlk section için özel stiller
+  &--first {
+    padding-top: 0;
+    padding-bottom: $spacer-6; // 3rem
+  }
+  
+  // Normal section
+  &--default {
+    padding-top: $spacer-6; // 3rem
+    padding-bottom: $spacer-6; // 3rem
+  }
+  
+  // Arka plan renkleri
+  &--light {
+    background-color: var(--bg-white);
+  }
+  
+  &--gray {
+    background-color: var(--bg-gray);
+  }
+  
+  &--dark {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+  }
+  
+  &--blue {
+    background-color: var(--blue-color);
+    color: var(--text-light);
+  }
+  
+  &--navy {
+    background-color: var(--navy-color);
+    color: var(--text-light);
+  }
+  
+  // İçerik container'ı
+  &__container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: $spacer;
+    padding-right: $spacer;
+    
+    // Max width varyasyonları
+    &--sm {
+      max-width: 640px;
+    }
+    
+    &--md {
+      max-width: 768px;
+    }
+    
+    &--lg {
+      max-width: 1024px;
+    }
+    
+    &--xl {
+      max-width: 1280px;
+    }
+    
+    &--full {
+      max-width: 100%;
+    }
+  }
+} 

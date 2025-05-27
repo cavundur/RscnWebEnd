@@ -1,0 +1,53 @@
+{
+  "name": "rscnweb",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "css:watch": "nodemon --watch src/styles -e scss -x \"echo 'CSS changed'\"",
+    "dev:all": "npm run css:watch & npm run dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "clean": "rm -rf .next && next dev",
+    "clean:deep": "rm -rf .next && rm -rf public/layout.css && rm -rf node_modules/.cache && next dev"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.0.1",
+    "@radix-ui/react-dialog": "^1.1.11",
+    "@radix-ui/react-dropdown-menu": "^2.1.15",
+    "@radix-ui/react-label": "^2.1.4",
+    "@radix-ui/react-navigation-menu": "^1.2.10",
+    "@radix-ui/react-scroll-area": "^1.2.6",
+    "@radix-ui/react-separator": "^1.1.4",
+    "@radix-ui/react-slot": "^1.2.2",
+    "axios": "^1.9.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "embla-carousel-react": "^8.6.0",
+    "framer-motion": "^12.9.4",
+    "lucide-react": "^0.503.0",
+    "next": "15.3.1",
+    "next-themes": "^0.4.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.56.1",
+    "react-scroll-parallax": "^3.4.5",
+    "swr": "^2.3.3",
+    "tailwind-merge": "^3.2.0",
+    "zod": "^3.24.3"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.1",
+    "sass": "^1.87.0",
+    "tailwindcss": "^4",
+    "tw-animate-css": "^1.2.8",
+    "typescript": "^5"
+  }
+}

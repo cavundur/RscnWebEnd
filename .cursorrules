@@ -1,0 +1,184 @@
+# Cursor Rules
+
+Bu dosya, Cursor AI'nin bu projede daima göz önünde bulundurması gereken teknik kuralları, kodlama standartlarını ve yapısal prensipleri içerir.
+
+## Proje Dili
+- Uygulamada herşey İngilizce olacak
+- Kod yorumları ve açıklamalar **Türkçe** yazılmalı
+
+---
+
+## ✨ Teknoloji Yığını
+- **Proje Türü**: Headless Web Sitesi (Next.js frontend + WordPress backend)
+- **CMS**: WordPress + ACF Pro (Advanced Custom Fields Pro)
+- **Framework**: Next.js (App Router kullanılıyor)
+- **Dil**: React 18+ ile TypeScript
+- **Stil**: Tailwind CSS + shadcn/ui bileşenleri
+- **Yardımcılar**: framer-motion, react-hook-form, zod
+- **Veri Kaynağı**: Headless WordPress + Yoast SEO JSON
+
+---
+
+## 🖊️ Kodlama Standartları
+- Tüm bileşenler fonksiyonel component yapısında olmalı
+- Kodlar TypeScript ile yazılmalı, dosyalar `.tsx` uzantılı olmalı
+- Bileşen isimleri `PascalCase`, dosya isimleri `kebap-case` formatında olmalı
+- Kod yorumları ve açıklamalar **Türkçe** yazılmalı
+- `console.log` gibi geliştirme içi komutlar push öncesi silinmelidir
+- Tüm fonksiyonların üstünde JSDoc formatında yorum bulunmalıdır
+
+---
+
+## 📂 Dosya ve Klasör Yapısı
+- `app/`: Sayfa yapıları
+- `components/`: Ortak bileşenler
+- `lib/`: Yardımcı fonksiyonlar, API servisleri
+- `types/`: Tüm veri tipleri burada tutulmalı
+- `styles/`: Tailwind ayarları, global stil tanımları
+- `store/`: Global durum yönetimi için zustand veya benzeri kullanılacaksa burada tanımlanmalı
+- `design/`: Varsayılan tasarım sistemi dosyaları (renk paleti, tipografi, spacing vb.) burada tutulmalı
+
+---
+
+## 🌟 Bileşen Kuralları
+- Her bileşen için ayrı `.tsx` ve gerekirse `.ts` veya `.css` dosyası tanımlanmalı
+- Props tanımlamaları `interface` kullanarak yapılmalı
+- Bileşenler test edilebilir olacak şekilde yapılandırılmalı
+- Tüm formlar `react-hook-form` + `zod` ile inşa edilmelidir
+- Shadcn bileşenleri Tailwind üzerinden override edilebilir
+
+---
+
+## 🎨 Stil Kuralları (Tailwind CSS + shadcn/ui)
+- Tüm stil tanımları Tailwind utility sınıfları ile yapılmalıdır
+- Shadcn/ui bileşenleri kullanılacaksa, override için `@layer components` ile tanımlar `globals.css` içine yazılmalıdır
+- Özel stiller için inline stil veya `style` attribute kullanılmamalı
+- Light/Dark mode Tailwind'in `dark:` sınıfları ile desteklenmelidir
+
+---
+
+## 🧩 UI & UX Kuralları
+- Kullanıcı dostu, sezgisel ve basit arayüzler tercih edilmelidir
+- Görsel hiyerarşi doğru şekilde uygulanmalı, başlıklar ve butonlar öncelik sırasına göre boyutlandırılmalıdır
+- Buton ve link gibi etkileşimli öğeler yeterli boşluk ve tıklama alanı içermelidir
+- Renk ve yazı tipi kontrastları erişilebilirlik standartlarına uygun olmalıdır
+- Loading, empty state ve hata ekranları mutlaka tanımlanmalı ve kullanıcıya açıkça bilgi verilmelidir
+- Tüm form alanları hata mesajları ve doğrulama örnekleriyle desteklenmelidir
+
+---
+
+## 📐 Tasarım Sistemi Kuralları
+- Projede bir tasarım sistemi standardı kullanılmalıdır
+- Renkler, tipografi, spacing, border-radius gibi değerler `design/tokens.ts` veya `design/tokens.json` içinde tanımlanmalı ve tüm bileşenlerde buradan çekilmelidir
+- Tailwind config içerisinde bu değişkenler `theme.extend` ile entegre edilmelidir
+- Yeni bileşenler mevcut sistemle tutarlı olacak şekilde oluşturulmalıdır
+
+---
+
+## 🚀 Performans & UX
+- Responsive tasarım `mobile-first` yaklaşımı ile yapılmalıdır
+- Tüm görseller `next/image` bileşeniyle lazy-load olacak şekilde kullanılmalıdır
+- Gereksiz render'lar için `memo`, `useCallback`, `useMemo` gibi optimizasyon teknikleri uygulanmalı
+- Önemli bileşenler `Suspense` + `loading.tsx` ile yüklenmelidir
+- Kullanıcı deneyimi için loading durumları açıkça gösterilmelidir
+- Lighthouse skorları performans, erişilebilirlik ve SEO açısından %90+ hedeflenmelidir
+- Sayfa yükleme süresi, interaktif olma süresi ve görsel boyutları minimize edilmelidir
+
+---
+
+## 📑 SEO & API
+
+### SEO Bileşeni Kullanımı
+- Her sayfa için dinamik meta başlık ve açıklama oluşturulmalıdır
+- `next/head` bileşeni ile meta etiketler aşağıdaki gibi tanımlanmalıdır:
+
+```tsx
+import Head from 'next/head';
+
+<Head>
+  <title>{metaTitle}</title>
+  <meta name="description" content={metaDescription} />
+  <link rel="canonical" href={canonicalUrl} />
+  <meta property="og:title" content={metaTitle} />
+  <meta property="og:description" content={metaDescription} />
+  <meta property="og:image" content={ogImageUrl} />
+</Head>
+```
+
+### Yapılandırılmış Veri (Structured Data - JSON-LD)
+- Schema.org uyumlu JSON-LD verileri, SEO iyileştirmesi için `application/ld+json` tipiyle eklenmelidir
+- Yoast SEO'dan gelen `yoast_head_json` alanından `title`, `description`, `og:image` vs. metadata çekilmeli
+- Tüm sayfalarda `next/head` ile dinamik meta etiketler oluşturulmalı
+- Sayfa özelinde canonical URL tanımlanmalıdır
+- Varsayılan site metadata'ları `_app.tsx` veya `layout.tsx` içinde merkezi olarak tanımlanmalı ve sayfa bazlı metadata ile override edilmelidir
+- `robots.txt`, `sitemap.xml`, `manifest.json` gibi SEO dosyaları otomatik oluşturulmalı (`next-sitemap`, `next-pwa` önerilir)
+- Yapılandırılmış veri (JSON-LD) gerektiğinde `<script type="application/ld+json">` ile sayfalara eklenmelidir
+- Başlık yapısı `h1 > h2 > h3` hiyerarşisine uygun kullanılmalı
+- API istekleri `lib/api.ts` gibi merkezi bir servis dosyasından yapılmalıdır
+- Axios veya fetch doğrudan component içinde çağrılmamalı
+
+---
+
+## 📚 Test Kuralları
+- Jest + React Testing Library kullanılmalı
+- Tüm test dosyaları `__tests__/` klasörüne veya `.test.tsx` olarak yazılmalı
+- Her bileşenin temel görünme ve etkileşim testleri yapılmalıdır
+
+---
+
+## 🌐 Uluslararasılaştırma (i18n)
+- Metinler hardcoded değil, `locales/` klasöründe tanımlanan çeviri dosyalarından alınmalıdır
+- `next-intl` veya `next-i18next` önerilir
+- Dil değiştirme seçenekleri header veya footer'da gösterilmelidir
+
+---
+
+## ♿ Erişilebilirlik (A11Y)
+- Her etkileşimli öğe (buton, link vs.) `aria-label` veya açıklayıcı içerik taşımalıdır
+- Tüm görsellerde `alt` metni bulunmalıdır
+- Form elemanları mutlaka `label` ile ilişkilendirilmelidir
+- Renk kontrastı WCAG standartlarına uygun olmalıdır
+
+---
+
+## 🎞️ Animasyon Kuralları (framer-motion)
+- Sayfa geçişlerinde `AnimatePresence` kullanılmalıdır
+- Hareketli bileşenler `motion.div` ile tanımlanmalıdır
+- Gereksiz veya dikkat dağıtan animasyonlardan kaçınılmalıdır
+- Kullanıcının sistem tercihi `prefers-reduced-motion` desteklenmelidir
+
+---
+
+## 🧯 Hata Yönetimi
+- Global hata yönetimi için `ErrorBoundary` bileşeni tanımlanmalıdır
+- API hataları `try/catch` bloklarıyla sarılmalı, kullanıcıya anlamlı mesaj gösterilmelidir
+- Hatalar gerektiğinde Sentry gibi servislere loglanmalıdır
+
+---
+
+## 📦 Yayınlama ve CI/CD
+- Build komutu `next build && next export` şeklinde çalıştırılmalıdır
+- Ortam değişkenleri `.env.local` içinde tanımlanmalı ve `process.env` üzerinden çekilmelidir
+- Otomatik deploy için Vercel veya benzeri platformlar kullanılabilir
+- Gerekirse `.github/workflows/` altında CI yapılandırması yapılmalıdır
+
+---
+
+## 👥 Takım Geliştirme Kuralları
+- Yeni özellikler için her zaman ayrı bir branch açılmalıdır
+- PR (pull request) açıklamaları özet ve anlamlı olmalıdır
+- Kod merge edilmeden önce en az 1 kişi tarafından gözden geçirilmelidir
+- `main` dalına doğrudan push yapılmamalıdır
+
+---
+
+## 💬 Chat Kuralları
+- Her zaman Türkçe cevap verilecek
+- Her zaman önceden yapılan işlemler göz önünde bulundurulsun
+- WordPress ACF alanlarında description için olası tüm alan isimlerini kontrol et
+- Console log'ları incelemelerde kullan ama production'da kaldır 
+
+## 📝 Notlar
+- WordPress API'den gelen verilerin tümünü incelemeliyiz.
+- Vercel üzerinden yapılan değişikliklerin hemen görünmesi için Next.js'in dev modunu kullanabiliriz.
+- Vercel üzerinden yayınlanacağı için vercele göre kod yazılmalı, vercel'in yapısına uygun kod yazılmalı.

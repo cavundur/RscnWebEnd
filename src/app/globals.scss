@@ -1,0 +1,328 @@
+@import "tailwindcss";
+/* @import "tw-animate-css"; */
+
+/* Font rendering optimizasyonları - piksellenme sorunu için */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+body {
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Başlık etiketleri için global stiller */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+h5 {
+  font-size: 1.125rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.625rem;
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.129 0.042 264.695);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.129 0.042 264.695);
+  --primary: oklch(0.208 0.042 265.755);
+  --primary-foreground: oklch(0.984 0.003 247.858);
+  --secondary: oklch(0.968 0.007 247.896);
+  --secondary-foreground: oklch(0.208 0.042 265.755);
+  --muted: oklch(0.968 0.007 247.896);
+  --muted-foreground: oklch(0.554 0.046 257.417);
+  --accent: oklch(0.968 0.007 247.896);
+  --accent-foreground: oklch(0.208 0.042 265.755);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.929 0.013 255.508);
+  --input: oklch(0.929 0.013 255.508);
+  --ring: oklch(0.704 0.04 256.788);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.984 0.003 247.858);
+  --sidebar-foreground: oklch(0.129 0.042 264.695);
+  --sidebar-primary: oklch(0.208 0.042 265.755);
+  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-accent: oklch(0.968 0.007 247.896);
+  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
+  --sidebar-border: oklch(0.929 0.013 255.508);
+  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.129 0.042 264.695);
+  
+  /* RSCN tema renkleri - Variables.scss'den alınan renkler */
+  --accent-color2: #71C1E2;
+  --theme-primary: #03AFC8;              /* Ana tema rengi */
+  --theme-primary-hover: #028EA3;
+  --theme-primary-light: #4CC0F0;
+  --theme-primary-light-text: #A6E5FF;
+  --navy-color: #023A8B;
+  --napoli-blue: #199FD6;
+  --blue-color: #023A8B;
+  --section-bg-color: #D3F2FF;
+  --section-bg-white-color: #ffffff;
+  --section-card-color: #B1E2F6;
+  --primary-color: #1d4ed8;              /* Primary blue */
+  --secondary-color: #6b7280;            /* Gray */
+  --accent-color: #3b82f6;               /* Light blue */
+  --navy-color-alt: #00275F;             /* Lacivert */
+  --blue-color-alt: #023A8B;             /* Koyu Mavi */
+  --text-color: #1f2937;
+  --text-light: #ffffff;
+  --bg-light: #ffffff;
+  --bg-dark: #1f2937;
+  --bg-gray: #f3f4f6;
+  --bg-white: #ffffff;
+  --border-color: #e5e7eb;
+  --my-custom-color: #ff0000;
+  --navy-color: rgb(0 55 151);
+}
+
+.dark {
+  --background: oklch(0.129 0.042 264.695);
+  --foreground: oklch(0.984 0.003 247.858);
+  --card: oklch(0.208 0.042 265.755);
+  --card-foreground: oklch(0.984 0.003 247.858);
+  --popover: oklch(0.208 0.042 265.755);
+  --popover-foreground: oklch(0.984 0.003 247.858);
+  --primary: oklch(0.929 0.013 255.508);
+  --primary-foreground: oklch(0.208 0.042 265.755);
+  --secondary: oklch(0.279 0.041 260.031);
+  --secondary-foreground: oklch(0.984 0.003 247.858);
+  --muted: oklch(0.279 0.041 260.031);
+  --muted-foreground: oklch(0.704 0.04 256.788);
+  --accent: oklch(0.279 0.041 260.031);
+  --accent-foreground: oklch(0.984 0.003 247.858);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.551 0.027 264.364);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.208 0.042 265.755);
+  --sidebar-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-accent: oklch(0.279 0.041 260.031);
+  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.551 0.027 264.364);
+  
+  /* RSCN tema renkleri - Dark Mode varyantları */
+  --accent-color2: #85D1EA;              /* Daha parlak */
+  --theme-primary: #0FD4F2;              /* Daha parlak mavi */
+  --theme-primary-hover: #3DDCF5;        /* Hover - daha açık */
+  --theme-primary-light: #6BE4F8;        /* En açık varyant */
+  --theme-primary-light-text: #C7F0FF;   /* Çok açık mavi */
+  --navy-color: #3B82F6;                 /* Parlak mavi */
+  --napoli-blue: #1E3A8A;                /* Daha parlak napoli */
+  --blue-color: #60A5FA;                 /* Orta mavi */
+  --section-bg-color: #1E3A8A;   
+  --section-bg-color: #262c3e;        /* Koyu mavi arkaplan */
+  --section-bg-white-color: #111827;     /* Koyu arkaplan */
+  --section-card-color: #1E40AF;         /* Koyu mavi kart */
+  --primary-color: #3B82F6;              /* Parlak primary blue */
+  --secondary-color: #9CA3AF;            /* Açık gray */
+  --accent-color: #60A5FA;               /* Parlak light blue */
+  --navy-color-alt: #3B82F6;             /* Parlak lacivert */
+  --blue-color-alt: #60A5FA;             /* Parlak koyu mavi */
+  --text-color: #F9FAFB;                 /* Açık metin */
+  --text-light: #1F2937;                 /* Koyu metin (ters) */
+  --bg-light: #111827;                   /* Koyu arkaplan */
+  --bg-dark: #F9FAFB;                    /* Açık arkaplan (ters) */
+  --bg-gray: #374151;                    /* Koyu gri */
+  --bg-white: #1F2937;                   /* Koyu beyaz */
+  --border-color: #4B5563;               /* Koyu border */
+  --my-custom-color: #FF6B6B;
+  --navy-color: rgb(0, 32, 88);         /* Daha yumuşak kırmızı */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground overflow-x-hidden;
+  }
+}
+
+/* NavigationMenuItem altındaki butonların hover background'ını kaldır */
+.NavigationMenuItem button:hover,
+.NavigationMenuItem a:hover {
+  background-color: transparent !important;
+}
+
+/* Sağ taraftaki menüler için alt menü pozisyonlama */
+/* Son iki menü öğesi için sağa hizala */
+.NavigationMenuItem:nth-last-child(1) div[data-radix-popper-content-wrapper],
+.NavigationMenuItem:nth-last-child(2) div[data-radix-popper-content-wrapper] {
+  transform: translate3d(0, 0, 0) !important;
+  left: auto !important;
+  right: 0 !important;
+}
+
+/* Ortadaki menü öğelerini merkeze hizala */
+.NavigationMenuItem:not(:nth-last-child(1)):not(:nth-last-child(2)):not(:first-child) div[data-radix-popper-content-wrapper] {
+  transform: translate3d(-50%, 0, 0) !important;
+  left: 50% !important;
+  right: auto !important;
+}
+
+/* İlk menü öğesini sola hizala */
+.NavigationMenuItem:first-child div[data-radix-popper-content-wrapper] {
+  transform: translate3d(0, 0, 0) !important;
+  left: 0 !important;
+  right: auto !important;
+}
+
+/* Direkt stil tanımları - SCSS derlemesinde sorun varsa bu stilar kullanılacak */
+//.pageHeader-direct {
+//  font-size: 2.5rem !important;
+//  line-height: 2.8rem !important;
+//  color: #00275F;
+//  margin-bottom: 1.5rem;
+//  border-bottom: 2px solid #023A8B;
+//  padding-bottom: 0.5rem;
+//}
+
+@media (min-width: 768px) {
+  //.pageHeader-direct {
+  //  font-size: 3rem !important;
+  //  line-height: 3.2rem !important;
+  //}
+}
+
+/* Global Liste Stilleri (Yüksek Öncelik) */
+ul:not([data-slot="navigation-menu-list"]), 
+ol:not([data-slot="navigation-menu-list"]), 
+menu:not([data-slot="navigation-menu-list"]) {
+  list-style-position: outside !important;
+  margin: 1rem 0 !important;
+  padding-left: 2rem !important;
+}
+
+ul:not([data-slot="navigation-menu-list"]) {
+  list-style-type: disc !important;
+}
+
+ol:not([data-slot="navigation-menu-list"]) {
+  list-style-type: decimal !important;
+}
+
+li {
+  margin-bottom: 0.5rem !important;
+}
+
+/* Nested lists */
+ul:not([data-slot="navigation-menu-list"]) ul, ul:not([data-slot="navigation-menu-list"]) ol, ul:not([data-slot="navigation-menu-list"]) menu,
+ol:not([data-slot="navigation-menu-list"]) ul, ol:not([data-slot="navigation-menu-list"]) ol, ol:not([data-slot="navigation-menu-list"]) menu,
+menu:not([data-slot="navigation-menu-list"]) ul, menu:not([data-slot="navigation-menu-list"]) ol, menu:not([data-slot="navigation-menu-list"]) menu {
+  margin-left: 1rem !important;
+  margin-top: 0.5rem !important;
+}
+
+/* WordPress içeriği için liste stillerini zorla */
+ol[class*="wp-block"] {
+  list-style-type: decimal !important;
+}
+
+/* Tailwind'in base, components ve utilities katmanlarını dahil et */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Kart açıklama metinleri için stiller */
+.news-description,
+.event-description {
+  p {
+    margin-bottom: 0;
+  }
+  
+  /* Line-clamp özelliğinin düzgün çalışmasını sağla */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 4.5rem;
+} 

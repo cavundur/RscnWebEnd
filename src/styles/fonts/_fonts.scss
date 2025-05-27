@@ -1,0 +1,274 @@
+@import "fontsVariables";
+
+@font-face {
+  font-family: '#{$icomoon-font-family}';
+  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?g24vy9');
+  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?g24vy9#iefix') format('embedded-opentype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?g24vy9') format('truetype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?g24vy9') format('woff'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?g24vy9##{$icomoon-font-family}') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="rs-"], [class*=" rs-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: '#{$icomoon-font-family}' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.rs-bina .path1 {
+  &:before {
+    content: $rs-bina-path1;  
+    opacity: 0.25;
+  }
+}
+.rs-bina .path2 {
+  &:before {
+    content: $rs-bina-path2;  
+    margin-left: -1em;  
+  }
+}
+.rs-ara {
+  &:before {
+    content: $rs-ara; 
+  }
+}
+.rs-egitim .path1 {
+  &:before {
+    content: $rs-egitim-path1;  
+    opacity: 0.2;
+  }
+}
+.rs-egitim .path2 {
+  &:before {
+    content: $rs-egitim-path2;  
+    margin-left: -1em;  
+    opacity: 0.2;
+  }
+}
+.rs-egitim .path3 {
+  &:before {
+    content: $rs-egitim-path3;  
+    margin-left: -1em;  
+    opacity: 0.2;
+  }
+}
+.rs-egitim .path4 {
+  &:before {
+    content: $rs-egitim-path4;  
+    margin-left: -1em;  
+    opacity: 0.2;
+  }
+}
+.rs-egitim .path5 {
+  &:before {
+    content: $rs-egitim-path5;  
+    margin-left: -1em;  
+    opacity: 0.2;
+  }
+}
+.rs-egitim .path6 {
+  &:before {
+    content: $rs-egitim-path6;  
+    margin-left: -1em;  
+  }
+}
+.rs-ev {
+  &:before {
+    content: $rs-ev; 
+  }
+}
+.rs-fuze .path1 {
+  &:before {
+    content: $rs-fuze-path1;  
+  }
+}
+.rs-fuze .path2 {
+  &:before {
+    content: $rs-fuze-path2;  
+    margin-left: -1em;  
+    opacity: 0.25;
+  }
+}
+.rs-fuze .path3 {
+  &:before {
+    content: $rs-fuze-path3;  
+    margin-left: -1em;  
+    opacity: 0.25;
+  }
+}
+.rs-grup .path1 {
+  &:before {
+    content: $rs-grup-path1;  
+  }
+}
+.rs-grup .path2 {
+  &:before {
+    content: $rs-grup-path2;  
+    margin-left: -1em;  
+  }
+}
+.rs-grup .path3 {
+  &:before {
+    content: $rs-grup-path3;  
+    margin-left: -1em;  
+    opacity: 0.25;
+  }
+}
+.rs-grup .path4 {
+  &:before {
+    content: $rs-grup-path4;  
+    margin-left: -1em;  
+    opacity: 0.25;
+  }
+}
+.rs-grup .path5 {
+  &:before {
+    content: $rs-grup-path5;  
+    margin-left: -1em;  
+    opacity: 0.25;
+  }
+}
+.rs-grup .path6 {
+  &:before {
+    content: $rs-grup-path6;  
+    margin-left: -1em;  
+    opacity: 0.25;
+  }
+}
+.rs-harita .path1 {
+  &:before {
+    content: $rs-harita-path1;  
+  }
+}
+.rs-harita .path2 {
+  &:before {
+    content: $rs-harita-path2;  
+    margin-left: -1em;  
+    opacity: 0.25;
+  }
+}
+.rs-harita .path3 {
+  &:before {
+    content: $rs-harita-path3;  
+    margin-left: -1em;  
+  }
+}
+.rs-harita2 {
+  &:before {
+    content: $rs-harita2; 
+  }
+}
+.rs-kalp {
+  &:before {
+    content: $rs-kalp; 
+  }
+}
+.rs-konusma .path1 {
+  &:before {
+    content: $rs-konusma-path1;  
+    opacity: 0.25;
+  }
+}
+.rs-konusma .path2 {
+  &:before {
+    content: $rs-konusma-path2;  
+    margin-left: -1em;  
+    opacity: 0.25;
+  }
+}
+.rs-konusma .path3 {
+  &:before {
+    content: $rs-konusma-path3;  
+    margin-left: -1em;  
+    opacity: 0.25;
+  }
+}
+.rs-konusma .path4 {
+  &:before {
+    content: $rs-konusma-path4;  
+    margin-left: -1em;  
+  }
+}
+.rs-menu {
+  &:before {
+    content: $rs-menu; 
+  }
+}
+.rs-mouse {
+  &:before {
+    content: $rs-mouse; 
+  }
+}
+.rs-x {
+  &:before {
+    content: $rs-x; 
+  }
+}
+.rs-angle-down {
+  &:before {
+    content: $rs-angle-down; 
+  }
+}
+.rs-angle-left {
+  &:before {
+    content: $rs-angle-left; 
+  }
+}
+.rs-angle-right {
+  &:before {
+    content: $rs-angle-right; 
+  }
+}
+.rs-angle-up {
+  &:before {
+    content: $rs-angle-up; 
+  }
+}
+.rs-arrow {
+  &:before {
+    content: $rs-arrow;     
+  }
+}
+.rs-facebook-f {
+  &:before {
+    content: $rs-facebook-f; 
+  }
+}
+.rs-instagram {
+  &:before {
+    content: $rs-instagram; 
+  }
+}
+.rs-linkedin-in {
+  &:before {
+    content: $rs-linkedin-in; 
+  }
+}
+.rs-linkedin {
+  &:before {
+    content: $rs-linkedin; 
+  }
+}
+.rs-twitter {
+  &:before {
+    content: $rs-twitter; 
+  }
+}
+.rs-youtube {
+  &:before {
+    content: $rs-youtube; 
+  }
+}
+

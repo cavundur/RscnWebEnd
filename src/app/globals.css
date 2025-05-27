@@ -1,0 +1,90 @@
+/* Reset all styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Font rendering optimizasyonları - piksellenme sorunu için */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  font-optical-sizing: auto;
+}
+
+/* Tüm elementler için font smoothing */
+*, *::before, *::after {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Liste stilleri - must come before any other styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Liste stilleri - en yüksek öncelikle */
+ul:not(.list-none), ol:not(.list-none), menu:not(.list-none) {
+  list-style-position: outside !important;
+  margin: 1rem 0 !important;
+  padding-left: 2rem !important;
+}
+
+ul:not(.list-none) {
+  list-style-type: disc !important;
+}
+
+ol:not(.list-none) {
+  list-style-type: decimal !important;
+}
+
+li {
+  margin-bottom: 0.5rem !important;
+}
+
+/* Nested lists */
+ul:not(.list-none) ul, ul:not(.list-none) ol, ul:not(.list-none) menu,
+ol:not(.list-none) ul, ol:not(.list-none) ol, ol:not(.list-none) menu,
+menu:not(.list-none) ul, menu:not(.list-none) ol, menu:not(.list-none) menu {
+  margin-left: 1rem !important;
+  margin-top: 0.5rem !important;
+}
+
+/* Dark mode support */
+.dark ul li::marker,
+.dark ol li::marker,
+.dark menu li::marker {
+  color: rgb(203 213 225) !important;
+}
+
+/* Carousel için scrollbar'ı gizleme */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Force list styles for WordPress content */
+ol[class*="wp-block"] {
+  list-style-type: decimal !important;
+}
+
+ol[class*="wp-block"] li::marker {
+  color: rgb(51 65 85) !important;
+}
+
+.dark ol[class*="wp-block"] li::marker {
+  color: rgb(203 213 225) !important;
+}

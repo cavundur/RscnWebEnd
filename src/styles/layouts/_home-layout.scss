@@ -1,0 +1,137 @@
+$napoli-blue: #199FD6;
+// Home layout için stil tanımlamaları
+.home {
+  background: var(--section-bg-color);
+
+  &__hero {
+    position: relative;
+    height: 100vh;
+    min-height: 500px;
+    overflow: hidden;
+    
+    @include md {
+      min-height: 600px;
+    }
+    
+    &-content {
+      position: relative;
+      z-index: 20;
+      height: 100%;
+      @include flex(column, center, flex-start);
+      padding: $spacer-5 0;
+    }
+    
+    &-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    
+    &-title {
+      @include heading-1;
+      color: var(--text-light);
+      margin-bottom: $spacer-3;
+    }
+    
+    &-description {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: $font-size-lg;
+      max-width: 600px;
+      margin-bottom: $spacer-4;
+      
+      @include md {
+        font-size: $font-size-xl;
+      }
+    }
+  }
+  
+  &__section {
+    padding: $spacer-5 0;
+  }
+#about {
+  margin: 0;
+
+  .aboutCards {
+
+    .aboutCard {
+
+      p {
+        line-height: 1.2;
+        font-size: 0.8rem;
+      }
+
+      h3 {
+        margin-top: 0.5rem;
+      }
+      h2 {
+        margin-top: 0rem;
+        margin-bottom: 0;
+      }
+
+      .aboutCardIcon {
+        font-size: 4rem;
+        opacity: 0.6;
+      }
+    }
+  }
+  
+}
+#aboutAs {
+  //background: var(--section-bg-color);
+}
+#events-news {
+  background: var(--section-bg-color);
+}
+
+#hizmetler {
+  margin-top: -5rem;
+
+  .homeAboutText {
+    background: var(--napoli-blue);
+    padding: 3rem;
+    margin-bottom: 5rem;
+    position: relative;
+    border-radius: 1rem;
+  }
+}
+#projeler {
+  background: var(--section-bg-white-color);
+}
+.homeAboutText {
+  background: var(--napoli-blue);
+  padding: 3rem;
+  //margin-bottom: 5rem;
+  position: relative;
+  border-radius: 1rem;
+  margin-top: -5rem;
+  z-index: 0;
+  position: relative;
+
+  p {
+    color: var(--text-light);
+    font-size: 4rem;
+    line-height: 1;
+    margin-bottom: 1rem;
+}
+.prose {
+  font-size: 1.2rem;
+}
+}
+} 
+
+.overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 1;
+  background: linear-gradient(to bottom, var(--napoli-blue), transparent);
+  pointer-events: none;
+}

@@ -1,0 +1,73 @@
+// Sheet ve Dialog animasyonları
+
+// Sağdan kaydırma animasyonu
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+// Soldan kaydırma animasyonu
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToLeft {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+// Animasyon sınıfları
+.slide-in-right {
+  animation: slideInFromRight 0.5s ease forwards;
+}
+
+.slide-out-right {
+  animation: slideOutToRight 0.5s ease forwards;
+}
+
+.slide-in-left {
+  animation: slideInFromLeft 0.5s ease forwards;
+}
+
+.slide-out-left {
+  animation: slideOutToLeft 0.5s ease forwards;
+}
+
+// Özel sınıflar - Sheet bileşeni için
+[data-state="open"].sheet-content-right {
+  animation: slideInFromRight 0.5s ease forwards;
+}
+
+[data-state="closed"].sheet-content-right {
+  animation: slideOutToRight 0.5s ease forwards;
+} 

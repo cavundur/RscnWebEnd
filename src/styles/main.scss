@@ -1,0 +1,28 @@
+//fonts
+@import "fonts/fonts";
+
+// Abstracts (Mixinler, fonksiyonlar)
+@import "abstracts/mixins";
+
+// Layouts (Ana düzen bileşenleri)
+@import "layouts/home-layout";
+@import "layouts/page-layout";
+
+// Components (Tekrar kullanılan UI bileşenleri)
+@import "components/header";
+@import "components/footer";
+@import "components/buttons";
+@import "components/page-header";
+@import "components/section";
+@import "components/content";
+@import "components/animations";
+
+// Pages (Sayfa özgü stiller)
+@import "pages/about";
+@import "pages/projects";
+
+// Not: İmport edilecek SASS dosyaları henüz oluşturulmadı.
+// Her bir dosya ihtiyaç oldukça oluşturulabilir. 
+
+
+
