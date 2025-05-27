@@ -389,9 +389,10 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
     let post = await wpApi.getPostBySlug(params.slug, 'posts');
     
     if (!post) {
+      console.log('Post not found, returning notFound()');
       return notFound();
     }
-    
+
     // Debug log to see the exact structure of the post data
     console.log('Post data structure:', {
       hasContent: !!post?.content,
@@ -441,7 +442,6 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
       title = post.title.rendered;
     } else if (post.slug && typeof post.slug === 'string') {
       console.log('Reconstructing title from slug');
-      // Convert slug to title case (e.g., "my-post-slug" to "My Post Slug")
       title = post.slug
         .replace(/-/g, ' ')
         .replace(/\b\w/g, (l: string) => l.toUpperCase());
@@ -474,15 +474,13 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
       content = "<p>No content available for this news article.</p>";
     }
     
-    // Get featured image if it exists (no placeholder)
+    // Get featured image if it exists
     const hasFeaturedImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url ? true : false;
     const featuredImageUrl = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || '';
     const featuredImageAlt = post._embedded?.['wp:featuredmedia']?.[0]?.alt_text || title;
     
     // Get publication date with fallback
     const publicationDate = post.acf?.publication_date || post.date;
-
-    // Make sure we always have a date to display
     const formattedDate = formatDateFromWordPress(publicationDate);
 
     return (
@@ -510,10 +508,10 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
                 </div>
               )}
               
-              {/* Galeri görüntüleme - tüm olası alanları kontrol ediyoruz */}
+              {/* Galeri görüntüleme */}
               {renderGallerySection(post)}
               
-              {/* Main content area - flex container */}
+              {/* Main content area */}
               <div className="flex flex-col md:flex-row gap-8 mb-8">
                 {/* Left column: Title and Content */}
                 <div className="flex-grow md:w-2/3">
@@ -602,26 +600,7 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
     );
   } catch (error) {
     console.error('Error fetching news detail:', error);
-    return (
-      <main className="pt-20">
-        <Section noPadding>
-          <div className="container mx-auto px-4 py-12">
-            <div className="max-w-4xl mx-auto">
-              <Link 
-                href="/news" 
-                className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6"
-              >
-                ← Back to News
-              </Link>
-              <div className="mt-8">
-                <h1 className="text-3xl md:text-4xl font-bold mb-4">Error</h1>
-                <p className="text-red-500">Error loading news article. Please try again later.</p>
-              </div>
-            </div>
-          </div>
-        </Section>
-      </main>
-    );
+    return notFound();
   }
 }
 
