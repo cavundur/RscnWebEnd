@@ -135,3 +135,23 @@ $napoli-blue: #199FD6;
   background: linear-gradient(to bottom, var(--napoli-blue), transparent);
   pointer-events: none;
 }
+
+.homeProjectsTitle {
+  h2 {
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
+    font-weight: 500;
+  }
+  p {
+    color: var(--accent-color2);
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+  }
+  .homeProjectsDivider {
+    width: 20%;
+    height: 3px;
+    background: var(--theme-primary-light-text);
+    margin-bottom: 1.2rem;
+  }
+}

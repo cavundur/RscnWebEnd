@@ -3,8 +3,21 @@ import Link from "next/link";
 import wpApi from "@/lib/api/wordpress";
 import Section from "@/components/Section";
 import PageHeader from "@/components/PageHeader";
+import DOMPurify from 'isomorphic-dompurify';
 
 export const revalidate = 3600; // Her saat yeniden oluştur
+
+/**
+ * Açıklama metnini HTML'den arındırıp kısaltır
+ * @param html Açıklama HTML'i
+ * @param maxLength Maksimum karakter
+ */
+function getShortText(html: string, maxLength = 180): string {
+  // HTML etiketlerini temizle
+  const clean = DOMPurify.sanitize(html, { ALLOWED_TAGS: [] });
+  if (clean.length <= maxLength) return clean;
+  return clean.slice(0, maxLength).trim() + '...';
+}
 
 export default async function ProjectsPage() {
   const projects = await wpApi.getProjects();
@@ -78,11 +91,9 @@ export default async function ProjectsPage() {
     <PageHeader {...pageHeaderProps}>
       <Section isFirst={true}>
         <div className="container mx-auto px-4 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {projects.map((project: any, idx: number) => {
-              // Görsel URL'sini imageUrls dizisinden al
               const imageUrl = imageUrls[idx];
-              // Başlık ve açıklama için önceliklendirme
               const title = project.acf?.project_title || project.title.rendered;
               const description =
                 project.acf?.explanation ||
@@ -91,41 +102,40 @@ export default async function ProjectsPage() {
                 project.excerpt?.rendered ||
                 project.content?.rendered ||
                 "";
+              const shortDescription = getShortText(description, 180);
 
               return (
-                <div key={project.id} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+                <div
+                  key={project.id}
+                  className="bg-white items-start rounded-xl border-2 flex flex-col items-center p-6 min-h-[370px]"
+                  style={{ borderColor: "var(--theme-primary-light-text)" }}
+                >
                   {imageUrl ? (
-                    <div className="relative w-full h-56">
-                      <Image
+                    <div className="w-full flex justify-center mb-4 cardImageBorder">
+                      <img
                         src={imageUrl}
-                        alt={project.title.rendered}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        alt={title}
+                        className="h-30 object-contain"
                       />
                     </div>
                   ) : (
-                    <div className="w-full h-56 bg-gray-200 flex items-center justify-center">
-                      <span className="text-gray-500">No image available</span>
+                    <div className="w-full flex justify-center mb-4">
+                      <div className="h-20 w-20 bg-slate-100 rounded flex items-center justify-center text-slate-400 text-2xl">
+                        <span>No Image</span>
+                      </div>
                     </div>
                   )}
-                  <div className="p-6 flex-1 flex flex-col">
-                    <h2 className="text-2xl font-semibold mb-2">
-                      {title}
-                    </h2>
-                    {description && (
-                      <div
-                        className="text-gray-700 mb-4 project-description"
-                        dangerouslySetInnerHTML={{ __html: description }}
-                      />
-                    )}
-                    <Link
-                      href={`/projects/${project.slug}`}
-                      className="mt-auto inline-block text-blue-600 hover:underline font-medium"
-                    >
-                      View Details
-                    </Link>
-                  </div>
+                  <p className="text-lg mb-2" style={{ color: '#001F54', fontWeight: 500, fontSize: '1.25rem', lineHeight: '1.2' }}>{title}</p>
+                  <p className="text-gray-600 text-sm mb-4 flex-1">
+                    {shortDescription}
+                  </p>
+                  <a
+                    href={`/projects/${project.slug}`}
+                    className="mt-auto text-sky-500 font-medium hover:underline"
+                    style={{ color: "var(--napoli-blue)" }}
+                  >
+                    See More
+                  </a>
                 </div>
               );
             })}

@@ -59,6 +59,15 @@ const cardIcons: IconName[] = [
   "grup"
 ];
 
+// Açıklama metnini HTML'den arındırıp kısaltan fonksiyon (projects/page.tsx ile aynı)
+function getShortText(html: string, maxLength = 180): string {
+  if (!html) return '';
+  // Basit bir regex ile HTML etiketlerini temizle
+  const clean = html.replace(/<[^>]+>/g, '');
+  if (clean.length <= maxLength) return clean;
+  return clean.slice(0, maxLength).trim() + '...';
+}
+
 export default function HomePageClient({
   homePageData,
   eventsData,
@@ -183,40 +192,52 @@ export default function HomePageClient({
       {/* Projeler Section */}
       <Section id="projeler">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-12 text-center">Projelerimiz</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.slice(0, 3).map((project) => (
-              <div key={project.id} className="group relative overflow-hidden rounded-lg">
-                <div className="aspect-[4/3] bg-slate-200 relative">
-                  {project.imageUrl ? (
-                    <Image
-                      src={project.imageUrl}
-                      alt={project.title}
-                      fill
-                      className="object-cover"
-                    />
+          <div className="flex flex-col gap-0 homeProjectsTitle">
+            <h2 className="text-3xl font-bold text-left">Our latest projects</h2>
+            <p className="text-lg">RSCN involvment in EU projects</p>
+            <div className="homeProjectsDivider"></div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {projects.slice(0, 3).map((project) => {
+              const title = project.title;
+              const imageUrl = project.imageUrl;
+              const description = project.description || '';
+              const shortDescription = getShortText(description, 180);
+              return (
+                <div
+                  key={project.id}
+                  className="bg-white items-start rounded-xl border-2 flex flex-col items-center p-6 min-h-[370px]"
+                  style={{ borderColor: 'var(--theme-primary-light-text)' }}
+                >
+                  {imageUrl ? (
+                    <div className="w-full flex justify-center mb-4 cardImageBorder">
+                      <img
+                        src={imageUrl}
+                        alt={title}
+                        className="h-30 object-contain"
+                      />
+                    </div>
                   ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-3xl font-bold text-slate-400">
-                      No image
+                    <div className="w-full flex justify-center mb-4">
+                      <div className="h-20 w-20 bg-slate-100 rounded flex items-center justify-center text-slate-400 text-2xl">
+                        <span>No Image</span>
+                      </div>
                     </div>
                   )}
+                  <p className="text-lg mb-2" style={{ color: '#001F54', fontWeight: 500, fontSize: '1.25rem', lineHeight: '1.2' }}>{title}</p>
+                  <p className="text-gray-600 text-sm text-center mb-4 flex-1">
+                    {shortDescription}
+                  </p>
+                  <a
+                    href={`/projects/${project.slug}`}
+                    className="mt-auto text-sky-500 font-medium hover:underline"
+                    style={{ color: "var(--napoli-blue)" }}
+                  >
+                    See More
+                  </a>
                 </div>
-                <div className="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Link href={`/projects/${project.slug}`}>
-                    <Button variant="secondary">İncele</Button>
-                  </Link>
-                </div>
-                <div className="p-4">
-                  <h3 className="text-lg font-bold">{project.title}</h3>
-                  <p className="text-sm text-gray-600">{project.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="flex justify-center mt-8">
-            <Link href="/projects">
-              <Button variant="outline">Show All Projects</Button>
-            </Link>
+              );
+            })}
           </div>
         </div>
       </Section>
