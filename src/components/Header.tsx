@@ -55,8 +55,8 @@ const menuItems: MenuItem[] = [
     href: "/resources",
     id: "resources",
     submenu: [
-      { name: "Examples of Good Practice", href: "/resources/good-practice" },
-      { name: "Publications", href: "/resources/publications" },
+      { name: "Examples of Good Practice", href: "/good-practice" },
+      { name: "Publications", href: "/publications" },
     ]
   },
   { 

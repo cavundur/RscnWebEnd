@@ -197,6 +197,7 @@ export default function HomePageClient({
             <p className="text-lg">RSCN involvment in EU projects</p>
             <div className="homeProjectsDivider"></div>
           </div>
+          
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {projects.slice(0, 3).map((project) => {
               const title = project.title;
@@ -238,6 +239,16 @@ export default function HomePageClient({
                 </div>
               );
             })}
+          </div>
+          <div className="mb-6 flex items-start flex-col">
+          <div className="homeProjectsDivider"></div>
+            <a
+              href="/projects"
+              className="px-5 py-2 rounded-lg font-medium"
+              style={{ background: 'var(--theme-primary-light-text)', fontWeight: 400, fontSize: '0.8rem', lineHeight: '1', padding: '1rem 1.4rem' }}
+            >
+              Show All Projects
+            </a>
           </div>
         </div>
       </Section>
