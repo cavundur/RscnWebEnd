@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
 import styles from './PageHeader.module.scss';
+import { convertToProxyUrl } from '@/lib/utils';
 
 type PageHeaderProps = {
   title: string;
