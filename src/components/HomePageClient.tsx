@@ -95,6 +95,10 @@ export default function HomePageClient({
   sloganImageData,
   projects
 }: HomePageClientProps) {
+  const aboutBgUrl = aboutSectionBackgroundImageUrl && aboutSectionBackgroundImageUrl.startsWith('https://')
+    ? aboutSectionBackgroundImageUrl
+    : '/images/placeholder/home-hero2.png';
+
   return (
     <div className="home">
       {/* Dinamik Hero Section - WordPress'ten gelen veri */}
@@ -128,7 +132,7 @@ export default function HomePageClient({
       {/* About Section - FLUID background ve overlay */}
       <div
         className="w-full bg-cover bg-center relative text-white"
-        style={{ backgroundImage: `url('${aboutSectionBackgroundImageUrl || '/images/placeholder/home-hero2.png'}')`, backgroundPosition: 'top', height:'120vh' }}
+        style={{ backgroundImage: `url('${aboutBgUrl}')`, backgroundPosition: 'top', height:'120vh' }}
       >
         <div className="absolute inset-0 z-0"></div>
         <div className="overlay"></div>
