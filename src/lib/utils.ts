@@ -1,4 +1,4 @@
-import { clsx, type ClassValue } from "clsx"
+import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -11,15 +11,19 @@ export function cn(...inputs: ClassValue[]) {
  * @returns Proxy URL'si
  */
 export function convertToProxyUrl(url: string): string {
-  if (!url) return '';
-  
   try {
     const urlObj = new URL(url);
-    // Hem HTTP hem HTTPS için kontrol et
-    if ((urlObj.hostname === 'cavundur.online' || urlObj.hostname === 'rscn.local') && 
-        urlObj.pathname.startsWith('/wp-content/')) {
+    
+    // WordPress medya URL'si mi kontrol et
+    if (
+      (urlObj.hostname === 'cavundur.online' || urlObj.hostname === 'rscn.local') &&
+      urlObj.pathname.startsWith('/wp-content/')
+    ) {
+      // Sadece pathname'i döndür, proxy bunu kullanacak
       return urlObj.pathname;
     }
+    
+    // WordPress medya URL'si değilse orijinal URL'yi döndür
     return url;
   } catch (error) {
     console.error('Error converting URL:', error);

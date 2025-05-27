@@ -382,9 +382,44 @@ function renderGallerySection(post: any) {
   }
 }
 
+export async function generateStaticParams() {
+  try {
+    // Get posts from both regular posts and custom news post type
+    const newsResponse = await wpApi.getPosts(1);
+    const newsData = newsResponse.posts || [];
+    
+    // Try to get custom news post type if available
+    let newsCustomData = [];
+    try {
+      const newsCustomResponse = await wpApi.getPosts(1, undefined, 'news');
+      if (newsCustomResponse && newsCustomResponse.posts) {
+        newsCustomData = newsCustomResponse.posts;
+      }
+    } catch (error) {
+      console.log('No custom news endpoint available');
+    }
+    
+    // Combine and return slugs
+    const allNews = [...newsData, ...newsCustomData];
+    return allNews.map((news: any) => ({
+      slug: news.slug || '',
+    })).filter(({ slug }) => slug !== '');
+  } catch (error) {
+    console.error('Error generating static params for news:', error);
+    return [];
+  }
+}
+
 export default async function NewsDetailPage({ params }: NewsPageProps) {
   try {
     console.log('Fetching news detail for slug:', params.slug);
+    
+    // Validate slug
+    if (!params.slug || typeof params.slug !== 'string') {
+      console.log('Invalid slug, returning notFound()');
+      return notFound();
+    }
+
     // First check regular posts endpoint
     let post = await wpApi.getPostBySlug(params.slug, 'posts');
     
@@ -393,44 +428,11 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
       return notFound();
     }
 
-    // Debug log to see the exact structure of the post data
-    console.log('Post data structure:', {
-      hasContent: !!post?.content,
-      contentType: post?.content ? typeof post.content : 'undefined',
-      contentRendered: post?.content?.rendered ? 'exists' : 'missing',
-      contentLength: post?.content?.rendered?.length || 0,
-      acfFields: post?.acf ? Object.keys(post.acf) : [],
-      postKeys: post ? Object.keys(post) : [],
-      rawContent: post?.content?.rendered || '(no content)',
-    });
-
-    // Galeri için debug log
-    console.log('Gallery related fields:', {
-      acf: post?.acf,
-      hasGallery: post?.acf?.gallery ? true : false,
-      galleryItems: post?.acf?.gallery,
-      hasImages: post?.acf?.images ? true : false,
-      imagesItems: post?.acf?.images,
-    });
-    
-    // Daha detaylı görsel analizi
-    console.log('ACF Structure for gallery detection:', {
-      allAcfKeys: post?.acf ? Object.keys(post.acf) : [],
-      acfFieldTypes: Object.entries(post?.acf || {}).map(([key, value]) => ({
-        field: key,
-        type: typeof value,
-        isArray: Array.isArray(value),
-        length: Array.isArray(value) ? value.length : null
-      }))
-    });
-    
-    // WordPress'ten gelen diğer potansiyel görsel alanları
-    console.log('WordPress media fields:', {
-      featuredMedia: post?.featured_media,
-      embeddedMedia: post?._embedded?.['wp:featuredmedia'],
-      attachments: post?._embedded?.['wp:attachment'],
-      hasAttachments: post?._embedded?.['wp:attachment'] ? true : false
-    });
+    // Validate post data
+    if (typeof post !== 'object' || post === null) {
+      console.log('Invalid post data, returning notFound()');
+      return notFound();
+    }
 
     // Get title with more fallback options
     let title = "";
@@ -449,7 +451,7 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
       console.log('Using default title');
       title = "News Article";
     }
-    
+
     // Try multiple sources for content with detailed fallbacks
     let content = '';
     
@@ -473,15 +475,22 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
       console.log('No content found, using default message');
       content = "<p>No content available for this news article.</p>";
     }
-    
+
     // Get featured image if it exists
     const hasFeaturedImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url ? true : false;
     const featuredImageUrl = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || '';
     const featuredImageAlt = post._embedded?.['wp:featuredmedia']?.[0]?.alt_text || title;
-    
+
     // Get publication date with fallback
     const publicationDate = post.acf?.publication_date || post.date;
     const formattedDate = formatDateFromWordPress(publicationDate);
+
+    // Validate all ACF fields before rendering
+    const authorName = typeof post.acf?.author_name === 'string' ? post.acf.author_name : '';
+    const sourceUrl = typeof post.acf?.source_url === 'string' ? post.acf.source_url : '';
+    const location = typeof post.acf?.location === 'string' ? post.acf.location : '';
+    const publicationTime = typeof post.acf?.publication_time === 'string' ? post.acf.publication_time : '';
+    const registrationLink = typeof post.acf?.registration_link === 'string' ? post.acf.registration_link : '';
 
     return (
       <main className="pt-20">
@@ -541,18 +550,18 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
                         <p>{formattedDate}</p>
                       </div>
                       
-                      {post.acf?.author_name && typeof post.acf.author_name === 'string' && (
+                      {authorName && (
                         <div>
                           <p className="text-sm font-medium text-slate-600">Author</p>
-                          <p>{post.acf.author_name}</p>
+                          <p>{authorName}</p>
                         </div>
                       )}
                       
-                      {post.acf?.source_url && typeof post.acf.source_url === 'string' && (
+                      {sourceUrl && (
                         <div>
                           <p className="text-sm font-medium text-slate-600">Source</p>
                           <a 
-                            href={post.acf.source_url}
+                            href={sourceUrl}
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="text-blue-600 hover:underline"
@@ -562,25 +571,25 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
                         </div>
                       )}
                       
-                      {post.acf?.location && typeof post.acf.location === 'string' && (
+                      {location && (
                         <div>
                           <p className="text-sm font-medium text-slate-600">Location</p>
-                          <p>{post.acf.location}</p>
+                          <p>{location}</p>
                         </div>
                       )}
                       
-                      {post.acf?.publication_time && typeof post.acf.publication_time === 'string' && (
+                      {publicationTime && (
                         <div>
                           <p className="text-sm font-medium text-slate-600">Time</p>
-                          <p>{post.acf.publication_time}</p>
+                          <p>{publicationTime}</p>
                         </div>
                       )}
                       
-                      {post.acf?.registration_link && typeof post.acf.registration_link === 'string' && (
+                      {registrationLink && (
                         <div>
                           <p className="text-sm font-medium text-slate-600">Registration Link</p>
                           <a 
-                            href={post.acf.registration_link}
+                            href={registrationLink}
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="text-blue-600 hover:underline"
@@ -601,33 +610,5 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
   } catch (error) {
     console.error('Error fetching news detail:', error);
     return notFound();
-  }
-}
-
-export async function generateStaticParams() {
-  try {
-    // Get posts from both regular posts and custom news post type
-    const newsResponse = await wpApi.getPosts(1);
-    const newsData = newsResponse.posts || [];
-    
-    // Try to get custom news post type if available
-    let newsCustomData = [];
-    try {
-      const newsCustomResponse = await wpApi.getPosts(1, undefined, 'news');
-      if (newsCustomResponse && newsCustomResponse.posts) {
-        newsCustomData = newsCustomResponse.posts;
-      }
-    } catch (error) {
-      console.log('No custom news endpoint available');
-    }
-    
-    // Combine and return slugs
-    const allNews = [...newsData, ...newsCustomData];
-    return allNews.map((news: any) => ({
-      slug: news.slug,
-    }));
-  } catch (error) {
-    console.error('Error generating static params for news:', error);
-    return [];
   }
 } 
