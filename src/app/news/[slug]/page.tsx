@@ -27,8 +27,17 @@ export async function generateMetadata({ params }: NewsPageProps): Promise<Metad
     }
 
     // Get title from news_title in ACF if available, otherwise use default title
-    const title = post.acf?.news_title || post.title?.rendered || post.slug?.replace(/-/g, ' ') || "News Article";
-    const description = post.excerpt?.rendered?.replace(/<[^>]+>/g, '') || "";
+    const title = typeof post.acf?.news_title === 'string' 
+      ? post.acf.news_title 
+      : typeof post.title?.rendered === 'string'
+        ? post.title.rendered
+        : typeof post.slug === 'string'
+          ? post.slug.replace(/-/g, ' ')
+          : "News Article";
+
+    const description = typeof post.excerpt?.rendered === 'string'
+      ? post.excerpt.rendered.replace(/<[^>]+>/g, '')
+      : "Latest news and updates from RSCN";
 
     return {
       title: `${title} | RSCN News`,
@@ -436,13 +445,13 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
 
     // Get title with more fallback options
     let title = "";
-    if (post.acf?.news_title && typeof post.acf.news_title === 'string') {
+    if (typeof post.acf?.news_title === 'string') {
       console.log('Using ACF news_title field');
       title = post.acf.news_title;
-    } else if (post.title?.rendered && typeof post.title.rendered === 'string') {
+    } else if (typeof post.title?.rendered === 'string') {
       console.log('Using standard title.rendered field');
       title = post.title.rendered;
-    } else if (post.slug && typeof post.slug === 'string') {
+    } else if (typeof post.slug === 'string') {
       console.log('Reconstructing title from slug');
       title = post.slug
         .replace(/-/g, ' ')
@@ -456,17 +465,17 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
     let content = '';
     
     // First check regular content field
-    if (post.content?.rendered && typeof post.content.rendered === 'string') {
+    if (typeof post.content?.rendered === 'string') {
       console.log('Using standard content.rendered field');
       content = sanitizeHtml(post.content.rendered);
     } 
     // Then check ACF fields
-    else if (post.acf?.description && typeof post.acf.description === 'string') {
+    else if (typeof post.acf?.description === 'string') {
       console.log('Using ACF description field');
       content = sanitizeHtml(post.acf.description);
     }
     // Then check excerpt as a fallback
-    else if (post.excerpt?.rendered && typeof post.excerpt.rendered === 'string') {
+    else if (typeof post.excerpt?.rendered === 'string') {
       console.log('Using excerpt.rendered as content');
       content = sanitizeHtml(post.excerpt.rendered);
     }
@@ -524,7 +533,7 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
               <div className="flex flex-col md:flex-row gap-8 mb-8">
                 {/* Left column: Title and Content */}
                 <div className="flex-grow md:w-2/3">
-                  <h1 className="text-3xl md:text-4xl font-bold mb-6" dangerouslySetInnerHTML={{ __html: title }}></h1>
+                  <h1 className="text-3xl md:text-4xl font-bold mb-6">{title}</h1>
                   
                   {/* Render content with enhanced HTML formatting */}
                   {content ? (
