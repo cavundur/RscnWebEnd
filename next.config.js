@@ -13,16 +13,12 @@ const nextConfig = {
         pathname: '/wp-content/uploads/**',
       },
       {
-        protocol: 'https',
-        hostname: 'rscn.local',
+        protocol: 'http',
+        hostname: 'cavundur.online',
         pathname: '/wp-content/uploads/**',
       },
       {
         protocol: 'http',
-        hostname: '**',
-      },
-      {
-        protocol: 'https',
         hostname: '**',
       },
     ],
@@ -59,6 +55,14 @@ const nextConfig = {
   onDemandEntries: {
     maxInactiveAge: 25 * 1000,
     pagesBufferLength: 2,
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/wp-content/:path*',
+        destination: 'http://cavundur.online/wp-content/:path*',
+      },
+    ]
   },
 }
 

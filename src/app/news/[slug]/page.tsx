@@ -389,10 +389,7 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
     let post = await wpApi.getPostBySlug(params.slug, 'posts');
     
     if (!post) {
-      return {
-        title: "News Not Found | RSCN",
-        description: "The requested news article could not be found.",
-      };
+      return notFound();
     }
     
     // Debug log to see the exact structure of the post data
@@ -436,13 +433,13 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
 
     // Get title with more fallback options
     let title = "";
-    if (post.acf?.news_title && post.acf.news_title.length > 0) {
+    if (post.acf?.news_title && typeof post.acf.news_title === 'string') {
       console.log('Using ACF news_title field');
       title = post.acf.news_title;
-    } else if (post.title?.rendered && post.title.rendered.length > 0) {
+    } else if (post.title?.rendered && typeof post.title.rendered === 'string') {
       console.log('Using standard title.rendered field');
       title = post.title.rendered;
-    } else if (post.slug) {
+    } else if (post.slug && typeof post.slug === 'string') {
       console.log('Reconstructing title from slug');
       // Convert slug to title case (e.g., "my-post-slug" to "My Post Slug")
       title = post.slug
@@ -457,17 +454,17 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
     let content = '';
     
     // First check regular content field
-    if (post.content?.rendered && post.content.rendered.length > 0) {
+    if (post.content?.rendered && typeof post.content.rendered === 'string') {
       console.log('Using standard content.rendered field');
       content = sanitizeHtml(post.content.rendered);
     } 
     // Then check ACF fields
-    else if (post.acf?.description && post.acf.description.length > 0) {
+    else if (post.acf?.description && typeof post.acf.description === 'string') {
       console.log('Using ACF description field');
       content = sanitizeHtml(post.acf.description);
     }
     // Then check excerpt as a fallback
-    else if (post.excerpt?.rendered && post.excerpt.rendered.length > 0) {
+    else if (post.excerpt?.rendered && typeof post.excerpt.rendered === 'string') {
       console.log('Using excerpt.rendered as content');
       content = sanitizeHtml(post.excerpt.rendered);
     }
@@ -546,18 +543,18 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
                         <p>{formattedDate}</p>
                       </div>
                       
-                      {post.acf?.author_name && (
+                      {post.acf?.author_name && typeof post.acf.author_name === 'string' && (
                         <div>
                           <p className="text-sm font-medium text-slate-600">Author</p>
-                          <p>{typeof post.acf.author_name === 'string' ? post.acf.author_name : ''}</p>
+                          <p>{post.acf.author_name}</p>
                         </div>
                       )}
                       
-                      {post.acf?.source_url && (
+                      {post.acf?.source_url && typeof post.acf.source_url === 'string' && (
                         <div>
                           <p className="text-sm font-medium text-slate-600">Source</p>
                           <a 
-                            href={typeof post.acf.source_url === 'string' ? post.acf.source_url : '#'} 
+                            href={post.acf.source_url}
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="text-blue-600 hover:underline"
@@ -567,25 +564,25 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
                         </div>
                       )}
                       
-                      {post.acf?.location && (
+                      {post.acf?.location && typeof post.acf.location === 'string' && (
                         <div>
                           <p className="text-sm font-medium text-slate-600">Location</p>
-                          <p>{typeof post.acf.location === 'string' ? post.acf.location : ''}</p>
+                          <p>{post.acf.location}</p>
                         </div>
                       )}
                       
-                      {post.acf?.publication_time && (
+                      {post.acf?.publication_time && typeof post.acf.publication_time === 'string' && (
                         <div>
                           <p className="text-sm font-medium text-slate-600">Time</p>
-                          <p>{typeof post.acf.publication_time === 'string' ? post.acf.publication_time : ''}</p>
+                          <p>{post.acf.publication_time}</p>
                         </div>
                       )}
                       
-                      {post.acf?.registration_link && (
+                      {post.acf?.registration_link && typeof post.acf.registration_link === 'string' && (
                         <div>
                           <p className="text-sm font-medium text-slate-600">Registration Link</p>
                           <a 
-                            href={typeof post.acf.registration_link === 'string' ? post.acf.registration_link : '#'} 
+                            href={post.acf.registration_link}
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="text-blue-600 hover:underline"
