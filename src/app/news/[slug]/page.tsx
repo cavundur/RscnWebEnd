@@ -408,11 +408,14 @@ export async function generateStaticParams() {
       console.log('No custom news endpoint available');
     }
     
-    // Combine and return slugs
+    // Combine and return slugs, excluding 'webinar'
     const allNews = [...newsData, ...newsCustomData];
-    return allNews.map((news: any) => ({
-      slug: news.slug || '',
-    })).filter(({ slug }) => slug !== '');
+    return allNews
+      .filter((news: any) => news.slug && news.slug !== 'webinar')
+      .map((news: any) => ({
+        slug: news.slug || '',
+      }))
+      .filter(({ slug }) => slug !== '');
   } catch (error) {
     console.error('Error generating static params for news:', error);
     return [];
