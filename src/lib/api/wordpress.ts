@@ -636,6 +636,26 @@ export async function getAbout() {
   }
 }
 
+export async function getServices() {
+  try {
+    const response = await wpClient.get('/services', {
+      params: {
+        per_page: 100,
+        _embed: 'wp:featuredmedia',
+        status: 'publish',
+        acf_format: 'standard',
+        acf: true,
+        _fields: 'id,title,content,excerpt,slug,featured_media,acf,_embedded'
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching services:', error);
+    return [];
+  }
+}
+
 const wpApi = {
   getPages,
   getPageBySlug,
@@ -653,6 +673,7 @@ const wpApi = {
   cleanContent,
   formatDate,
   getAbout,
+  getServices,
 };
 
 export default wpApi;
