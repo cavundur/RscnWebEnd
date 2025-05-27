@@ -3,6 +3,7 @@ import Link from "next/link";
 import wpApi from "@/lib/api/wordpress";
 import Section from "@/components/Section";
 import { notFound } from "next/navigation";
+import { convertToProxyUrl } from '@/lib/utils';
 
 /**
  * Proje detay sayfası - ACF alanları İngilizce'ye çevrilmiş ve gereksiz kodlar kaldırılmıştır.
@@ -19,6 +20,19 @@ export default async function ProjectDetailPage({ params }: Props) {
 
   if (!project) return notFound();
 
+  // Görsel fallback mantığı
+  let imageUrl = '';
+  if (project._embedded?.["wp:featuredmedia"]?.[0]?.source_url) {
+    imageUrl = convertToProxyUrl(project._embedded["wp:featuredmedia"][0].source_url);
+  } else if (project.acf?.project_images && Array.isArray(project.acf.project_images) && project.acf.project_images[0]?.url) {
+    imageUrl = convertToProxyUrl(project.acf.project_images[0].url);
+  } else {
+    imageUrl = '/images/placeholder/project.png';
+  }
+
+  // İçerik fallback mantığı
+  const description = project.acf?.description || project.content?.rendered || project.excerpt?.rendered || '';
+
   return (
     <main className="pt-20">
       <Section noPadding>
@@ -33,22 +47,28 @@ export default async function ProjectDetailPage({ params }: Props) {
 
             <h1 className="text-3xl md:text-4xl font-bold mb-6">{project.title.rendered}</h1>
 
-            {/* Kapak görseli varsa göster */}
-            {project._embedded?.["wp:featuredmedia"]?.[0]?.source_url && (
-              <div className="aspect-video relative w-full mb-8 rounded-lg overflow-hidden">
+            {/* Kapak görseli varsa göster, yoksa placeholder */}
+            <div className="w-full flex justify-left mb-8">
+              <div className="bg-white rounded-lg flex items-left justify-center" style={{ height: 200, width: 'auto', minWidth: 200 }}>
                 <Image
-                  src={project._embedded["wp:featuredmedia"][0].source_url}
+                  src={imageUrl}
                   alt={project.title.rendered}
-                  fill
-                  className="object-cover"
-                  priority
+                  height={200}
+                  width={400}
+                  style={{ width: 'auto', height: 200, maxWidth: '100%' }}
+                  className="object-contain"
                 />
               </div>
-            )}
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
               <div className="col-span-2">
-                {/* Eğer klasik içerik kullanılmıyorsa bu alanı kaldırdık */}
+                {/* İçerik varsa göster, yoksa bilgilendirici mesaj */}
+                {description ? (
+                  <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: description }} />
+                ) : (
+                  <p className="text-gray-500 italic">No content available for this project.</p>
+                )}
               </div>
 
               <div className="bg-slate-50 p-6 rounded-lg h-fit">
