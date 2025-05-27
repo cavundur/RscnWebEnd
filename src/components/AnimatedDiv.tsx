@@ -23,6 +23,7 @@ export default function AnimatedDiv({
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
+  
   // Animasyon yönüne göre başlangıç değerlerini belirleme
   const getInitialPosition = () => {
     switch (direction) {
