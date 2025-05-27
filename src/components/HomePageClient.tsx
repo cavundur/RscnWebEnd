@@ -12,6 +12,7 @@ import EventsNewsCarousel from "@/components/EventsNewsCarousel";
 import type { IconName } from "@/components/Icon";
 import type { Post as WPPost } from "@/lib/api/wordpress";
 import AnimatedDiv from "@/components/AnimatedDiv";
+import { convertToProxyUrl } from '@/lib/utils';
 
 // Post tipini genişlet
 interface Post extends WPPost {
@@ -109,7 +110,7 @@ export default function HomePageClient({
         {sloganImageData ? (
           <AnimatedDiv className="sloganImage" direction="down">
             <Image
-              src={sloganImageUrl}
+              src={sloganImageUrl ? convertToProxyUrl(sloganImageUrl) : '/images/placeholder/slogan.svg'}
               alt="Slogan"
               width={300}
               height={100}
@@ -127,7 +128,7 @@ export default function HomePageClient({
       {/* About Section - FLUID background ve overlay */}
       <div
         className="w-full bg-cover bg-center relative text-white"
-        style={{ backgroundImage: `url('${aboutSectionBackgroundImageUrl}')`, backgroundPosition: 'top', height:'120vh' }}
+        style={{ backgroundImage: `url('${aboutSectionBackgroundImageUrl || '/images/placeholder/home-hero2.png'}')`, backgroundPosition: 'top', height:'120vh' }}
       >
         <div className="absolute inset-0 z-0"></div>
         <div className="overlay"></div>
@@ -213,7 +214,7 @@ export default function HomePageClient({
                   {imageUrl ? (
                     <div className="w-full flex justify-center mb-4 cardImageBorder">
                       <img
-                        src={imageUrl}
+                        src={imageUrl ? convertToProxyUrl(imageUrl) : '/images/placeholder/project.png'}
                         alt={title}
                         className="h-30 object-contain"
                       />
@@ -254,7 +255,7 @@ export default function HomePageClient({
       </Section>
 
       {/* İletişim Section */}
-      <Section id="iletisim" className="bg-slate-900 text-white" direction="up">
+      <Section id="iletisim" className="bg-slate-900 text-white">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-12 text-center">{contactSectionTitle}</h2>
           <div className="flex flex-col md:flex-row gap-8">
