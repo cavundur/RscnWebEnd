@@ -549,7 +549,7 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
                       {post.acf?.author_name && (
                         <div>
                           <p className="text-sm font-medium text-slate-600">Author</p>
-                          <p>{post.acf.author_name}</p>
+                          <p>{typeof post.acf.author_name === 'string' ? post.acf.author_name : ''}</p>
                         </div>
                       )}
                       
@@ -557,7 +557,7 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
                         <div>
                           <p className="text-sm font-medium text-slate-600">Source</p>
                           <a 
-                            href={post.acf.source_url} 
+                            href={typeof post.acf.source_url === 'string' ? post.acf.source_url : '#'} 
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="text-blue-600 hover:underline"
@@ -570,27 +570,27 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
                       {post.acf?.location && (
                         <div>
                           <p className="text-sm font-medium text-slate-600">Location</p>
-                          <p>{post.acf.location}</p>
+                          <p>{typeof post.acf.location === 'string' ? post.acf.location : ''}</p>
                         </div>
                       )}
                       
                       {post.acf?.publication_time && (
                         <div>
                           <p className="text-sm font-medium text-slate-600">Time</p>
-                          <p>{post.acf.publication_time}</p>
+                          <p>{typeof post.acf.publication_time === 'string' ? post.acf.publication_time : ''}</p>
                         </div>
                       )}
                       
                       {post.acf?.registration_link && (
                         <div>
-                          <p className="text-sm font-medium text-slate-600">Registration</p>
+                          <p className="text-sm font-medium text-slate-600">Registration Link</p>
                           <a 
-                            href={post.acf.registration_link} 
+                            href={typeof post.acf.registration_link === 'string' ? post.acf.registration_link : '#'} 
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="text-blue-600 hover:underline"
                           >
-                            Register Now
+                            Register
                           </a>
                         </div>
                       )}
