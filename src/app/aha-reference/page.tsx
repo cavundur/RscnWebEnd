@@ -1,7 +1,11 @@
+// import { useState } from 'react';
+// import WorldMap from '@/components/WorldMap';
+// import ProjectList from '@/components/ProjectList';
 import wpApi from "@/lib/api/wordpress";
 import PageHeader from "@/components/PageHeader";
 import Section from "@/components/Section";
 import Image from "next/image"; // Örnek için eklendi, gerekirse kullanılabilir
+import AhaReferenceClient from '@/components/AhaReferenceClient';
 
 // export const revalidate = 10; // Gerekirse revalidate süresi eklenebilir
 
@@ -10,6 +14,8 @@ import Image from "next/image"; // Örnek için eklendi, gerekirse kullanılabil
  * @returns JSX.Element
  */
 export default async function AhaReferencePage() {
+  // const [selectedCountry, setSelectedCountry] = useState<string | undefined>();
+
   // WordPress'ten "aha-reference-sites" slug'lı sayfayı çek
   const page = await wpApi.getPageBySlug("aha-reference-sites");
 
@@ -179,6 +185,8 @@ export default async function AhaReferencePage() {
           ))}
         </div>
       </Section>
+      {/* Yeni client component ile harita ve liste */}
+      <AhaReferenceClient projects={referenceSites} />
     </>
   );
 } 

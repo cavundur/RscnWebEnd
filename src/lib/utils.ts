@@ -10,7 +10,12 @@ export function cn(...inputs: ClassValue[]) {
  * @param url WordPress medya URL'si
  * @returns Proxy URL'si
  */
-export function convertToProxyUrl(url: string): string {
+export function convertToProxyUrl(url: string | null): string {
+  // Eğer url null veya boşsa varsayılan görsel yolunu döndür
+  if (!url) {
+    return '/images/placeholder.jpg'; // Projedeki bir varsayılan görsel
+  }
+
   try {
     const urlObj = new URL(url);
     
@@ -27,6 +32,6 @@ export function convertToProxyUrl(url: string): string {
     return url;
   } catch (error) {
     console.error('Error converting URL:', error);
-    return url;
+    return '/images/placeholder.jpg'; // Hata durumunda varsayılan görsel
   }
 }
