@@ -13,6 +13,7 @@ import type { IconName } from "@/components/Icon";
 import type { Post as WPPost } from "@/lib/api/wordpress";
 import AnimatedDiv from "@/components/AnimatedDiv";
 import { convertToProxyUrl } from '@/lib/utils';
+import { homePageStatic } from '@/data/staticData';
 
 // Post tipini genişlet
 interface Post extends WPPost {
@@ -99,33 +100,32 @@ export default function HomePageClient({
     ? aboutSectionBackgroundImageUrl
     : '/images/placeholder/home-hero2.png';
 
+  // title, description ve slogan görseli için statik veri kullan
+  const staticHeroTitle = homePageStatic.heroTitle;
+  const staticHeroDescription = homePageStatic.heroDescription;
+  const staticSloganImageUrl = homePageStatic.sloganImage;
+
   return (
     <div className="home">
       {/* Dinamik Hero Section - WordPress'ten gelen veri */}
       <PageHeader
-        title={heroTitle}
-        description={heroDescription}
+        title={staticHeroTitle}
+        description={staticHeroDescription}
         imageUrl={featuredImageUrl}
         imageAlt={heroImageAlt}
         titleContainerClassName="text-left"
         variant="home"
         socialLinks={<SocialMediaLinks className="SocialMediaLinks" />}
       >
-        {sloganImageData ? (
-          <AnimatedDiv className="sloganImage" direction="down">
-            <Image
-              src={sloganImageUrl ? convertToProxyUrl(sloganImageUrl) : '/images/placeholder/slogan.svg'}
-              alt="Slogan"
-              width={300}
-              height={100}
-              className="slogan-image"
-            />
-          </AnimatedDiv>
-        ) : (
-          <div className="slogan-text">
-            <h2 className="text-2xl font-light text-white">Stronger Together</h2>
-          </div>
-        )}
+        <AnimatedDiv className="sloganImage" direction="down">
+          <Image
+            src={staticSloganImageUrl}
+            alt="Slogan"
+            width={300}
+            height={100}
+            className="slogan-image"
+          />
+        </AnimatedDiv>
       </PageHeader>
 
 
