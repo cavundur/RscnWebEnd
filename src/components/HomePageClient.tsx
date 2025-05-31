@@ -132,7 +132,7 @@ export default function HomePageClient({
       {/* About Section - FLUID background ve overlay */}
       <div
         className="w-full bg-cover bg-center relative text-white"
-        style={{ backgroundImage: `url('${aboutBgUrl}')`, backgroundPosition: 'top', height:'120vh' }}
+        style={{ backgroundImage: `url('${aboutSectionBackgroundImageUrl}')`, backgroundPosition: 'top', height:'120vh' }}
       >
         <div className="absolute inset-0 z-0"></div>
         <div className="overlay"></div>
@@ -146,9 +146,7 @@ export default function HomePageClient({
       <AnimatedDiv id="aboutAs" className="relative z-10 py-0">
         <div className="container mx-auto px-4 max-w-4xl homeAboutText">
           {aboutSectionTitle && (
-            <p>
-              {aboutSectionTitle}
-            </p>
+            <p>{aboutSectionTitle}</p>
           )}
           {aboutSectionDescription && (
             <div 
