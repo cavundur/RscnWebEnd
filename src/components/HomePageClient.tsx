@@ -29,7 +29,6 @@ interface HomePageClientProps {
   homePageData: any;
   eventsData: Post[];
   aboutSectionCardsData: AboutCardData[];
-  aboutSectionBackgroundImageUrl: string;
   aboutSectionTitle: string;
   aboutSectionDescription: string;
   contactSectionTitle: string;
@@ -74,7 +73,6 @@ export default function HomePageClient({
   homePageData,
   eventsData,
   aboutSectionCardsData,
-  aboutSectionBackgroundImageUrl,
   aboutSectionTitle,
   aboutSectionDescription,
   contactSectionTitle,
@@ -96,9 +94,7 @@ export default function HomePageClient({
   sloganImageData,
   projects
 }: HomePageClientProps) {
-  const aboutBgUrl = aboutSectionBackgroundImageUrl && aboutSectionBackgroundImageUrl.startsWith('https://')
-    ? aboutSectionBackgroundImageUrl
-    : '/images/placeholder/home-hero2.png';
+  const aboutSectionBackgroundImageUrl = homePageStatic.aboutSectionBackground;
 
   // title, description ve slogan görseli için statik veri kullan
   const staticHeroTitle = homePageStatic.heroTitle;
