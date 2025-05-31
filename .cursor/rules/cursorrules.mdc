@@ -1,21 +1,16 @@
 ---
 description: >
-  Project standards for a Next.js + WordPress Headless CMS setup. Includes component structure, naming, styling, performance and SEO rules.
-autoAttach: true
+globs: 
+alwaysApply: false
 ---
-
 
 # Cursor Rules
 
 Bu dosya, Cursor AI'nin bu projede daima göz önünde bulundurması gereken teknik kuralları, kodlama standartlarını ve yapısal prensipleri içerir.
 
----
-
 ## 🗣️ DİL
 - Uygulama dili: İngilizce
 - Kod yorumları ve açıklamalar: Türkçe
-
----
 
 ## ⚙️ TEKNOLOJİ YIĞINI
 - Framework: Next.js (App Router)
@@ -25,8 +20,6 @@ Bu dosya, Cursor AI'nin bu projede daima göz önünde bulundurması gereken tek
 - Kütüphaneler: framer-motion, react-hook-form, zod
 - Veri Kaynağı: Yoast SEO JSON + WordPress API
 
----
-
 ## 🧱 KODLAMA STANDARTLARI
 - Tüm bileşenler fonksiyonel component olmalı
 - Tüm dosyalar `.tsx` uzantılı TypeScript dosyaları olmalı
@@ -34,8 +27,6 @@ Bu dosya, Cursor AI'nin bu projede daima göz önünde bulundurması gereken tek
 - Kod yorumları Türkçe yazılmalı
 - `console.log` gibi debug kodları production öncesi kaldırılmalı
 - Tüm fonksiyonlar JSDoc ile belgelenmeli
-
----
 
 ## 📁 DOSYA YAPISI
 - `app/`: Sayfalar
@@ -46,8 +37,6 @@ Bu dosya, Cursor AI'nin bu projede daima göz önünde bulundurması gereken tek
 - `store/`: Global state (zustand)
 - `design/`: Tasarım sistemi token'ları
 
----
-
 ## 🧩 BİLEŞEN KURALLARI
 - Her bileşenin `.tsx`, gerekirse `.ts` ve `.css` dosyası olmalı
 - Props tanımları `interface` ile yapılmalı
@@ -55,15 +44,11 @@ Bu dosya, Cursor AI'nin bu projede daima göz önünde bulundurması gereken tek
 - Formlar `react-hook-form` + `zod` ile oluşturulmalı
 - Shadcn bileşenleri Tailwind ile override edilebilir
 
----
-
 ## 🎨 STİL KURALLARI
 - Stil sadece Tailwind utility sınıfları ile yazılmalı
 - Global override için `@layer components` kullanılarak `globals.css` içinde tanım yapılmalı
 - Inline style kullanılmamalı
 - Dark mode `dark:` sınıflarıyla desteklenmeli
-
----
 
 ## 💡 UI/UX
 - Basit, sezgisel arayüzler oluşturulmalı
@@ -72,14 +57,10 @@ Bu dosya, Cursor AI'nin bu projede daima göz önünde bulundurması gereken tek
 - Hata, boş veri ve loading durumları açıkça belirtilmeli
 - Form validasyonu görünür olmalı
 
----
-
 ## 📐 TASARIM SİSTEMİ
 - Renkler, tipografi, spacing vb. `design/tokens.ts` dosyasında tanımlanmalı
 - Bu değerler Tailwind `theme.extend` içine entegre edilmeli
 - Yeni bileşenler sistemle tutarlı olmalı
-
----
 
 ## 🚀 PERFORMANS
 - Mobile-first responsive tasarım
@@ -89,8 +70,6 @@ Bu dosya, Cursor AI'nin bu projede daima göz önünde bulundurması gereken tek
 - Lighthouse skorları %90+ olmalı
 - Sayfa interaktivitesi ve yükleme süresi optimize edilmeli
 
----
-
 ## 📑 SEO & API
 - Dinamik meta etiketleri `next/head` ile tanımlanmalı
 - JSON-LD yapılandırılmış veri `yoast_head_json` ile çekilmeli
@@ -98,21 +77,15 @@ Bu dosya, Cursor AI'nin bu projede daima göz önünde bulundurması gereken tek
 - API istekleri `lib/api.ts` içinden yönetilmeli
 - Fetch veya axios doğrudan bileşende kullanılmamalı
 
----
-
 ## 🧪 TEST
 - Jest + React Testing Library kullanılmalı
 - Testler `__tests__/` klasörüne veya `.test.tsx` formatında yazılmalı
 - Her bileşenin görünme ve etkileşim testleri yapılmalı
 
----
-
 ## 🌍 i18n
 - Metinler `locales/` içinden çekilmeli
 - `next-intl` veya `next-i18next` kullanılmalı
 - Dil seçenekleri UI içinde yer almalı
-
----
 
 ## ♿ ERİŞİLEBİLİRLİK
 - Etkileşimli tüm öğelerde `aria-label` veya anlamlı içerik olmalı
@@ -120,22 +93,16 @@ Bu dosya, Cursor AI'nin bu projede daima göz önünde bulundurması gereken tek
 - Form alanlarında `label` olmalı
 - Renk kontrastı WCAG uyumlu olmalı
 
----
-
 ## 🎞️ ANİMASYON
 - Sayfa geçişlerinde `AnimatePresence` kullanılmalı
 - Bileşenler `motion.div` ile tanımlanmalı
 - Gereksiz animasyonlardan kaçınılmalı
 - `prefers-reduced-motion` desteği olmalı
 
----
-
 ## ❗ HATA YÖNETİMİ
 - Global `ErrorBoundary` bileşeni olmalı
 - API hataları `try/catch` ile sarılmalı
 - Üretim hataları Sentry gibi servislerle loglanmalı
-
----
 
 ## 🚢 YAYIN & CI/CD
 - Build komutu: `next build && next export`
@@ -143,23 +110,17 @@ Bu dosya, Cursor AI'nin bu projede daima göz önünde bulundurması gereken tek
 - Deploy için Vercel önerilir
 - CI işlemleri `.github/workflows/` altında yapılandırılmalı
 
----
-
 ## 👥 TAKIM KURALLARI
 - Yeni işler için branch açılmalı
 - PR açıklamaları anlamlı ve özet olmalı
 - Merge öncesi gözden geçirme zorunlu
 - `main` dalına direkt push yapılmamalı
 
----
-
 ## 💬 CHAT İÇİN
 - Cevaplar Türkçe olacak
 - Önceki işlemler dikkate alınmalı
 - ACF alanlarında tüm description alanları kontrol edilmeli
 - Console log'lar sadece geliştirme sırasında kullanılmalı
-
----
 
 ## 📝 EK NOTLAR
 - WordPress API'den gelen tüm alanlar analiz edilmeli

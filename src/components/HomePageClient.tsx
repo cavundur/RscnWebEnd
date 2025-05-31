@@ -14,6 +14,8 @@ import type { Post as WPPost } from "@/lib/api/wordpress";
 import AnimatedDiv from "@/components/AnimatedDiv";
 import { convertToProxyUrl } from '@/lib/utils';
 import { homePageStatic } from '@/data/staticData';
+import Logo from "@/components/Logo";
+import Footer from "@/components/Footer";
 
 // Post tipini genişlet
 interface Post extends WPPost {
@@ -252,6 +254,26 @@ export default function HomePageClient({
         </div>
       </Section>
 
+      <Section id="become-member" className="bg-[var(--blue-color-alt)] p-0 pt-0" noContainer>
+        <img
+          src={homePageStatic.becomeMemberImage}
+          alt={homePageStatic.becomeMemberTitle}
+          className="object-cover w-full max-w-none mb-0 rounded-none"
+          style={{ maxHeight: 320, display: 'block', margin: 0, padding: 0 }}
+        />
+        
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="flex flex-col">
+            <div className="p-8 rounded-lg flex flex-col max-w-3xl mx-auto">
+              <p className="mb-4 headInfoTitle text-white">{homePageStatic.becomeMemberTitle}</p>
+              <div className="prose max-w-none text-white mb-4 head-info text-center">{homePageStatic.becomeMemberSubtitle}</div>
+              <div className="head-info-line"></div>
+              <div className="prose max-w-none text-white mb-4">{homePageStatic.becomeMemberDescription}</div>
+            </div>
+          </div>
+        </div>
+      </Section>
+
       {/* İletişim Section */}
       <Section id="iletisim" className="bg-slate-900 text-white">
         <div className="container mx-auto px-4">
@@ -331,38 +353,7 @@ export default function HomePageClient({
         </div>
       </Section>
 
-      {/* Footer */}
-      <footer className="bg-slate-950 text-white py-8">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="mb-4 md:mb-0">
-              <h2 className="text-xl font-bold">LOGO</h2>
-            </div>
-            <div className="flex space-x-4">
-              <Link href="#" className="hover:text-blue-400 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-                </svg>
-              </Link>
-              <Link href="#" className="hover:text-blue-400 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                  <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-                </svg>
-              </Link>
-              <Link href="#" className="hover:text-blue-400 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
-                </svg>
-              </Link>
-            </div>
-          </div>
-          <div className="border-t border-slate-800 mt-6 pt-6 text-center text-sm text-slate-400">
-            &copy; 2024 Tüm hakları saklıdır.
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 } 

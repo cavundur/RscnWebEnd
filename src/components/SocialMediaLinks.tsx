@@ -3,7 +3,7 @@ import Icon from "./Icon";
 
 export default function SocialMediaLinks({ className = "" }: { className?: string }) {
   return (
-    <div className={className}>
+    <div className="homeContentSocial">
       <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
         <Icon name="linkedin-in" />
       </a>

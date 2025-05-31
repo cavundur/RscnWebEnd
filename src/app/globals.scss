@@ -214,7 +214,7 @@ h6 {
   --bg-white: #1F2937;                   /* Koyu beyaz */
   --border-color: #4B5563;               /* Koyu border */
   --my-custom-color: #FF6B6B;
-  --navy-color: rgb(0, 32, 88);         /* Daha yumuşak kırmızı */
+  --navy-color: rgb(0, 32, 88);       
 }
 
 @layer base {
@@ -326,3 +326,54 @@ ol[class*="wp-block"] {
   text-overflow: ellipsis;
   max-height: 4.5rem;
 } 
+
+    .homeContentSocial {
+      //position: absolute;
+      bottom: 2rem;
+      left: 0;
+      z-index: 4;
+      background-color: var(--theme-primary-light);
+      align-items: center;
+      padding: 1rem;
+      pointer-events: auto;
+      display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    pointer-events: auto;
+    
+      > div {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+        pointer-events: auto;
+    
+        a {
+          color: var(--navy-color);
+          font-size: 1.5rem;
+          opacity: 0.8;
+          transition: opacity 0.2s, transform 0.2s;
+          text-decoration: none;
+          pointer-events: auto;
+    
+          &:hover {
+            opacity: 1;
+            transform: scale(1.1);
+            color: var(--napoli-blue);
+          }
+    
+          span {
+            font-family: 'rscn-font' !important;
+            font-style: normal;
+            font-weight: normal;
+            speak: never;
+            display: inline-block;
+            text-decoration: inherit;
+            text-align: center;
+            font-size: inherit;
+            line-height: 1;
+          }
+        }
+      }
+    }
