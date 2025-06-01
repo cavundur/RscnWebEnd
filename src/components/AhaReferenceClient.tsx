@@ -138,9 +138,9 @@ const AhaReferenceClient = ({ projects }: AhaReferenceClientProps) => {
   };
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="mx-auto mb-8 ">
       {/*<h1 className="text-3xl font-bold mb-8">AHA Reference Sites</h1>*/}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 ">
         <div className="lg:col-span-2">
           <WorldMap
             projects={processedProjects}
@@ -148,32 +148,36 @@ const AhaReferenceClient = ({ projects }: AhaReferenceClientProps) => {
             selectedCountry={selectedCountry}
           />
         </div>
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 mx-auto max-w-4xl container">
           {/* Filtre Barı */}
-          <div className="flex flex-wrap gap-4 mb-4 items-end">
+          
+          <div className="flex flex-wrap gap-4 mb-4 items-center justify-between">
+          <div className="text-lg font-bold">Projects List</div>
+            <div className="flex flex-wrap gap-4 mb-4 items-end">
             <div>
-              <label className="block text-sm font-medium mb-1">Ülke</label>
+              <label className="block text-sm font-medium mb-1">Country</label>
               <select value={countryFilter} onChange={e => setCountryFilter(e.target.value)} className="border rounded px-2 py-1">
-                <option value="">Tümü</option>
+                <option value="">All Countries</option>
                 {[...new Set(processedProjects.map(p => p.country))].map(code => (
                   <option key={code} value={code}>{code}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Proje Adı</label>
-              <input type="text" value={projectFilter} onChange={e => setProjectFilter(e.target.value)} className="border rounded px-2 py-1" placeholder="Proje adı ara..." />
+              <label className="block text-sm font-medium mb-1">Project Name</label>
+              <input type="text" value={projectFilter} onChange={e => setProjectFilter(e.target.value)} className="border rounded px-2 py-1" placeholder="Search by project name..." />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Yıldız</label>
+              <label className="block text-sm font-medium mb-1">Stars</label>
               <select value={starFilter} onChange={e => setStarFilter(e.target.value ? Number(e.target.value) : "")} className="border rounded px-2 py-1">
-                <option value="">Tümü</option>
+                <option value="">All Stars</option>
                 {[5,4,3,2,1].map(star => (
                   <option key={star} value={star}>{star}</option>
                 ))}
               </select>
             </div>
-            <button onClick={handleClearFilters} className="ml-2 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Tümünü Göster</button>
+            <button onClick={handleClearFilters} className="ml-2 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Show All</button>
+            </div>
           </div>
           <ProjectList
             projects={filteredProjects}

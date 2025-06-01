@@ -7,6 +7,7 @@ import Section from "@/components/Section";
 import Image from "next/image"; // Örnek için eklendi, gerekirse kullanılabilir
 import AhaReferenceClient from '@/components/AhaReferenceClient';
 import styles from './page.module.scss';
+import Footer from "@/components/Footer";
 
 // export const revalidate = 10; // Gerekirse revalidate süresi eklenebilir
 
@@ -152,6 +153,7 @@ export default async function AhaReferencePage() {
       
       {/* Yeni client component ile harita ve liste */}
       <AhaReferenceClient projects={referenceSites} />
+      <Footer />
     </>
   );
 } 

@@ -217,21 +217,30 @@ const WorldMap = ({ projects, onCountrySelect, selectedCountry }: WorldMapProps)
         >
           <Geographies geography="/world-110m.json">
             {({ geographies }) =>
-              geographies.map(geo => (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  fill={getCountryColor(geo.id)}
-                  stroke="#FFFFFF"
-                  strokeWidth={0.5}
-                  style={{
-                    default: { outline: "none" },
-                    hover: { fill: "#F53", outline: "none", cursor: "pointer" },
-                    pressed: { outline: "none" }
-                  }}
-                  onClick={(evt) => handleCountryClick(geo, evt)}
-                />
-              ))
+              geographies.map(geo => {
+                const isSelected = geo.id === (activeCountry ? alpha3ToNumeric[activeCountry] : null);
+                return (
+                  <Geography
+                    key={geo.rsmKey}
+                    geography={geo}
+                    stroke="#FFFFFF"
+                    strokeWidth={isSelected ? 2 : 0.5}
+                    style={{
+                      default: {
+                        fill: isSelected ? "#1746a2" : getCountryColor(geo.id),
+                        outline: "none"
+                      },
+                      hover: {
+                        fill: isSelected ? "#1746a2" : "#05679c",
+                        outline: "none",
+                        cursor: "pointer"
+                      },
+                      pressed: { outline: "none" }
+                    }}
+                    onClick={(evt) => handleCountryClick(geo, evt)}
+                  />
+                );
+              })
             }
           </Geographies>
         </ZoomableGroup>

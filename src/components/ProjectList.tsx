@@ -52,10 +52,10 @@ const ProjectList = ({ projects, selectedCountry }: ProjectListProps) => {
     : projects;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="container mx-auto px-4 max-w-4xl flex flex-col gap-2">
       {filteredProjects.length > 0 ? (
         filteredProjects.map((project) => (
-          <div key={project.id} className="flex flex-row items-center border rounded-lg p-4 bg-white shadow-sm">
+          <div key={project.id} className="flex flex-row items-center border rounded-lg p-4 bg-white">
             {/* Ülke ismi */}
             <div className="w-32 font-semibold text-gray-700">{COUNTRY_NAMES[project.country] || project.country}</div>
             {/* Proje ismi */}
