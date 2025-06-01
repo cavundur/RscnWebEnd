@@ -27,6 +27,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.rs-x-icon {
+  &:before {
+    content: $rs-x-icon; 
+  }
+}
+
 .rs-bina .path1 {
   &:before {
     content: $rs-bina-path1;  

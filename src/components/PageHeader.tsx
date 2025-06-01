@@ -1,10 +1,33 @@
 "use client";
 
 import Image from "next/image";
-import { ReactNode } from "react";
+import { ReactNode, memo, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import styles from './PageHeader.module.scss';
 import { convertToProxyUrl } from '@/lib/utils';
+
+// Görsel bileşenini memoize et
+const OptimizedImage = memo(({ src, alt }: { src: string, alt: string }) => (
+  <Image
+    src={src}
+    alt={alt}
+    fill
+    priority
+    className={styles.image}
+    sizes="100vw"
+    quality={85}
+  />
+));
+
+OptimizedImage.displayName = 'OptimizedImage';
+
+// Fallback bileşeni
+const ImageFallback = () => (
+  <div className="w-full h-full bg-gray-200 animate-pulse"></div>
+);
+
+// Motion bileşenlerini yüklemek için hafif fallback
+const MotionDiv = motion.div;
 
 type PageHeaderProps = {
   title: string;
@@ -17,7 +40,7 @@ type PageHeaderProps = {
   socialLinks?: React.ReactNode;
 };
 
-export default function PageHeader({
+const PageHeader = memo(function PageHeader({
   title,
   description,
   imageUrl,
@@ -27,20 +50,19 @@ export default function PageHeader({
   variant = 'page',
   socialLinks,
 }: PageHeaderProps) {
+  // Görsel URL'sini optimize et
+  const optimizedImageUrl = imageUrl 
+    ? convertToProxyUrl(imageUrl) 
+    : '/images/placeholder/hero.png';
+
   if (variant === 'home') {
     return (
       <div className={styles.homeHeader}>
         <div className={styles.homeImageContainer}>
           {imageUrl ? (
-            <Image
-              src={imageUrl}
-              alt={imageAlt}
-              fill
-              priority
-              className={styles.image}
-            />
+            <OptimizedImage src={optimizedImageUrl} alt={imageAlt} />
           ) : (
-            <div className="w-full h-full bg-gray-200"></div>
+            <ImageFallback />
           )}
           <div className={styles.overlay}></div>
         </div>
@@ -52,10 +74,10 @@ export default function PageHeader({
           )}
           <div>
             <div className={styles.titleContainer}>
-              <motion.div
+              <MotionDiv
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
                 className={titleContainerClassName ? titleContainerClassName : ''}
               >
                 <h1 className={styles.title}>{title}</h1>
@@ -65,7 +87,7 @@ export default function PageHeader({
                     dangerouslySetInnerHTML={{ __html: description }}
                   ></p>
                 )}
-              </motion.div>
+              </MotionDiv>
             </div>
             {children && (
               <div className={styles.homeContentSlogan}>
@@ -77,22 +99,19 @@ export default function PageHeader({
       </div>
     );
   }
+  
   // page variant
   return (
     <div className={styles.pageHeader}>
       {/* Background image */}
       <div className={styles.pageImageContainer}>
-        {imageUrl ? (
-          <Image
-            src={imageUrl ? convertToProxyUrl(imageUrl) : '/images/placeholder/hero.png'}
-            alt={imageAlt}
-            fill
-            priority
-            className={styles.image}
-          />
-        ) : (
-          <div className="w-full h-full bg-gray-200"></div>
-        )}
+        <Suspense fallback={<ImageFallback />}>
+          {imageUrl ? (
+            <OptimizedImage src={optimizedImageUrl} alt={imageAlt} />
+          ) : (
+            <ImageFallback />
+          )}
+        </Suspense>
         <div className={styles.overlay}></div>
       </div>
       {/* Content container */}
@@ -101,10 +120,10 @@ export default function PageHeader({
         <div className="container mx-auto px-4 max-w-4xl mt-0">
           <div className={`${styles.titleContainer} mb-2`}>
             <div className={styles.titleSection}>
-              <motion.div
+              <MotionDiv
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
                 className={titleContainerClassName ? titleContainerClassName : ''}
               >
                 <h1 className={styles.title}>{title}</h1>
@@ -114,7 +133,7 @@ export default function PageHeader({
                     dangerouslySetInnerHTML={{ __html: description }}
                   ></div>
                 )}
-              </motion.div>
+              </MotionDiv>
             </div>
           </div>
         </div>
@@ -128,4 +147,6 @@ export default function PageHeader({
       </div>
     </div>
   );
-} 
+});
+
+export default PageHeader; 

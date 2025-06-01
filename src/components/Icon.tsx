@@ -2,6 +2,7 @@ import React from 'react';
 
 // İkon isimleri için tip kontrolü (IntelliSense için)
 export type IconName =
+  'x-icon'
   | 'bina'
   | 'ara'
   | 'egitim'
@@ -25,7 +26,7 @@ export type IconName =
   | 'linkedin-in'
   | 'linkedin'
   | 'twitter'
-  | 'youtube';
+  | 'youtube'
 
 type IconProps = {
   name: IconName;

@@ -3,7 +3,7 @@ import Link from "next/link";
 import wpApi, { Post } from "@/lib/api/wordpress";
 import Section from "@/components/Section";
 import PageHeader from "@/components/PageHeader";
-import { convertToProxyUrl } from '@/lib/utils';
+import { convertToProxyUrl, devLog } from '@/lib/utils';
 
 export const revalidate = 3600; // Her saat yeniden oluştur
 
@@ -376,7 +376,7 @@ export default async function EventsPage() {
                         </h2>
                         
                         {/* Debug log ekleyelim */}
-                        {(() => {
+                        {process.env.NODE_ENV !== 'production' && (() => {
                           console.log("Rendering description for event", item.id, "events_description value:", item.acf?.events_description, "description value:", item.acf?.description);
                           return null;
                         })()}

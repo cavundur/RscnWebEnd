@@ -1,4 +1,4 @@
-import { fetchReferenceSites } from "@/lib/api";
+import wpApi from "@/lib/api/wordpress";
 import dynamic from "next/dynamic";
 import { getCountryName } from "@/lib/countries";
 import Link from "next/link";
@@ -6,7 +6,7 @@ import Link from "next/link";
 const WorldMap = dynamic(() => import("@/components/WorldMap"), { ssr: false });
 
 export default async function ReferenceSitesPage() {
-  const projects = await fetchReferenceSites();
+  const projects = await wpApi.fetchReferenceSites();
 
   return (
     <div className="max-w-5xl mx-auto py-8 px-4">

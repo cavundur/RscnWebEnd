@@ -250,6 +250,56 @@ export const countries = [
  * 3 harfli ülke kodundan ülke adını döndürür
  */
 export function getCountryName(code: string): string {
-  const found = countries.find(c => c.code === code);
+  const found = countries.find((c) => c.code === code);
   return found ? found.name : code;
-} 
+}
+
+/**
+ * Ülke adından 3 harfli ISO kodunu döndürür
+ */
+export function countryNameToISO(name: string): string {
+  // Eğer zaten 3 harfli bir kodsa, doğrudan döndür
+  if (typeof name === 'string' && /^[A-Z]{3}$/.test(name.trim())) {
+    return name.trim();
+  }
+  const found = countries.find((c) => c.name.toLowerCase() === name.trim().toLowerCase());
+  return found ? found.code : name;
+}
+
+/**
+ * Alpha-3 (ISO 3166-1) ülke kodundan numeric (string) ülke koduna dönüştürme tablosu
+ * Harita datası ile eşleşme için gereklidir
+ */
+export const alpha3ToNumeric: Record<string, string> = {
+  AFG: "004", ALB: "008", DZA: "012", AND: "020", AGO: "024",
+  ARG: "032", AUS: "036", AUT: "040", BHR: "048", BGD: "050",
+  ARM: "051", BRB: "052", BEL: "056", BMU: "060", BTN: "064",
+  BOL: "068", BIH: "070", BWA: "072", BRA: "076", BRN: "096",
+  BGR: "100", BFA: "854", BDI: "108", KHM: "116", CMR: "120",
+  CAN: "124", CPV: "132", CAF: "140", TCD: "148", CHL: "152",
+  CHN: "156", COL: "170", COM: "174", COG: "178", COD: "180",
+  CRI: "188", CIV: "384", HRV: "191", CUB: "192", CYP: "196",
+  CZE: "203", DNK: "208", DJI: "262", DMA: "212", DOM: "214",
+  ECU: "218", EGY: "818", SLV: "222", GNQ: "226", ERI: "232",
+  EST: "233", ETH: "231", FIN: "246", FRA: "250", GAB: "266",
+  GMB: "270", GEO: "268", DEU: "276", GHA: "288", GRC: "300",
+  GRL: "304", GRD: "308", GTM: "320", GIN: "324", GNB: "624",
+  GUY: "328", HTI: "332", HND: "340", HUN: "348", ISL: "352",
+  IND: "356", IDN: "360", IRN: "364", IRQ: "368", IRL: "372",
+  ISR: "376", ITA: "380", JAM: "388", JPN: "392", JOR: "400",
+  KAZ: "398", KEN: "404", KWT: "414", KGZ: "417", LAO: "418",
+  LVA: "428", LBN: "422", LSO: "426", LBR: "430", LBY: "434",
+  LTU: "440", LUX: "442", MDG: "450", MWI: "454", MYS: "458",
+  MDV: "462", MLI: "466", MLT: "470", MRT: "478", MUS: "480",
+  MEX: "484", MDA: "498", MCO: "492", MNG: "496", MNE: "499",
+  MAR: "504", MOZ: "508", NAM: "516", NPL: "524", NLD: "528",
+  NZL: "554", NIC: "558", NER: "562", NGA: "566", NOR: "578",
+  OMN: "512", PAK: "586", PAN: "591", PRY: "600", PER: "604",
+  PHL: "608", POL: "616", PRT: "620", QAT: "634", ROU: "642",
+  RUS: "643", RWA: "646", SAU: "682", SEN: "686", SRB: "688",
+  SGP: "702", SVK: "703", SVN: "705", ZAF: "710", ESP: "724",
+  SWE: "752", CHE: "756", TJK: "762", THA: "764", TGO: "768",
+  TTO: "780", TUN: "788", TUR: "792", UKR: "804", ARE: "784",
+  GBR: "826", USA: "840", UZB: "860", VEN: "862", VNM: "704",
+  YEM: "887", ZMB: "894", ZWE: "716", PSE: "275", XKX: "383"
+}; 

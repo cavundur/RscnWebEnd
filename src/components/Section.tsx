@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, memo } from "react";
 
 /**
  * Section bileşeni - Animasyon kaldırıldı, sadece padding ve container yapısı kaldı.
@@ -15,7 +15,8 @@ type SectionProps = {
   noContainer?: boolean; // Container olmamasını istediğimiz durumlar için
 };
 
-export default function Section({
+// Memo kullanarak Section bileşenini optimize et
+const Section = memo(function Section({
   children,
   className = "",
   id,
@@ -41,4 +42,8 @@ export default function Section({
       )}
     </section>
   );
-} 
+});
+
+Section.displayName = 'Section';
+
+export default Section; 

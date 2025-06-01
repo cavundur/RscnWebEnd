@@ -10,35 +10,42 @@ import Logo from "@/components/Logo";
 
 export const revalidate = 10; // Her 10 saniyede bir yeniden doğrula (dev modunda test için)
 
+// Sadece geliştirme ortamında console.log kullanacak yardımcı fonksiyon
+const devLog = (message: string, ...data: any[]) => {
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(message, ...data);
+  }
+};
+
 // Medya ID'sinden URL'yi al
 async function getImageUrl(mediaId: number | string | undefined, defaultImage: string): Promise<string> {
-  console.log(`getImageUrl called with mediaId:`, mediaId);
+  devLog(`getImageUrl called with mediaId:`, mediaId);
   
   if (!mediaId) {
-    console.log("No mediaId provided, returning default:", defaultImage);
+    devLog("No mediaId provided, returning default:", defaultImage);
     return defaultImage;
   }
   
   try {
     // Eğer mediaId zaten bir URL ise
     if (typeof mediaId === 'string' && (mediaId.startsWith('http') || mediaId.startsWith('/'))) {
-      console.log("mediaId is already a URL:", mediaId);
+      devLog("mediaId is already a URL:", mediaId);
       return mediaId;
     }
     
     // Değilse, API'den medyayı getir
-    console.log("Fetching media with ID:", mediaId);
+    devLog("Fetching media with ID:", mediaId);
     const media = await wpApi.getMediaById(Number(mediaId));
     
     if (!media) {
-      console.log("Media not found for ID:", mediaId, "using default:", defaultImage);
+      devLog("Media not found for ID:", mediaId, "using default:", defaultImage);
       return defaultImage;
     }
     
-    console.log("Media found:", media.id, "URL:", media.source_url);
+    devLog("Media found:", media.id, "URL:", media.source_url);
     return media.source_url || defaultImage;
   } catch (error) {
-    console.error('Failed to get media URL for ID:', mediaId, error);
+    devLog('Failed to get media URL for ID:', mediaId, error);
     return defaultImage;
   }
 }
@@ -93,12 +100,12 @@ export default async function AboutPage() {
   const aboutCPT = await wpApi.getAbout();
   
   // Debug için API yanıtını console'a yazdıralım
-  console.log("About Page Data:", aboutPage);
-  console.log("About CPT Data:", aboutCPT);
-  console.log("About ACF fields:", aboutCPT?.acf);
-  console.log("Mission Info:", aboutCPT?.acf?.mission_info);
-  console.log("Aims Info:", aboutCPT?.acf?.aims_info);
-  console.log("Aims List:", aboutCPT?.acf?.aims_list);
+  devLog("About Page Data:", aboutPage);
+  devLog("About CPT Data:", aboutCPT);
+  devLog("About ACF fields:", aboutCPT?.acf);
+  devLog("Mission Info:", aboutCPT?.acf?.mission_info);
+  devLog("Aims Info:", aboutCPT?.acf?.aims_info);
+  devLog("Aims List:", aboutCPT?.acf?.aims_list);
   
   // Öne çıkan görsel URL'si
   let featuredImageUrl;
@@ -106,13 +113,13 @@ export default async function AboutPage() {
   // Farklı seviyelerde kontrol ederek Featured Image URL'yi bulmaya çalışalım
   if (aboutCPT?._embedded?.['wp:featuredmedia']?.[0]?.source_url) {
     featuredImageUrl = aboutCPT._embedded['wp:featuredmedia'][0].source_url;
-    console.log("Featured Image from About CPT:", featuredImageUrl);
+    devLog("Featured Image from About CPT:", featuredImageUrl);
   } else if (aboutPage?._embedded?.['wp:featuredmedia']?.[0]?.source_url) {
     featuredImageUrl = aboutPage._embedded['wp:featuredmedia'][0].source_url;
-    console.log("Featured Image from About Page:", featuredImageUrl);
+    devLog("Featured Image from About Page:", featuredImageUrl);
   } else {
     featuredImageUrl = "/images/aboutPage2.png"; // WordPress'ten görsel gelmezse statik görseli kullan
-    console.log("Using default featured image:", featuredImageUrl);
+    devLog("Using default featured image:", featuredImageUrl);
   }
   
   // Diğer görseller için varsayılan placeholder
@@ -121,8 +128,8 @@ export default async function AboutPage() {
   const defaultStaffImage = "/images/placeholder/staff.jpg";
   
   // About içeriğini birleştir (CPT UI öncelikli)
-  console.log("About Page Title:", aboutPage?.title?.rendered);
-  console.log("About ACF title:", aboutPage?.acf?.about_title);
+  devLog("About Page Title:", aboutPage?.title?.rendered);
+  devLog("About ACF title:", aboutPage?.acf?.about_title);
   
   // WordPress'te sayfa başlığı "The RSCN", ACF alanında "about_title" değeri "About"
   // Bu nedenle, ACF alanından öncelikli olarak başlığı alıyoruz
@@ -131,8 +138,8 @@ export default async function AboutPage() {
   const aboutDescription = aboutCPT?.acf?.about_description || aboutPage?.content?.rendered || "";
   
   // Görsel URL'lerini al ve detaylı log'lar ekle
-  console.log("Secondary Image (raw):", aboutCPT?.acf?.secondary_image);
-  console.log("About Schema Image (raw):", aboutCPT?.acf?.about_schema_image);
+  devLog("Secondary Image (raw):", aboutCPT?.acf?.secondary_image);
+  devLog("About Schema Image (raw):", aboutCPT?.acf?.about_schema_image);
   
   const secondaryImageUrl = await getImageUrl(aboutCPT?.acf?.secondary_image, "");
   const aboutSchemaImageUrl = await getImageUrl(aboutCPT?.acf?.about_schema_image, "");
@@ -141,8 +148,8 @@ export default async function AboutPage() {
   const secretariatMemberImageUrl = await getImageUrl(aboutCPT?.acf?.secretariat_member_image, defaultStaffImage);
   
   // Hata ayıklama için görüntü URL'lerini yazdır
-  console.log("Secondary Image URL (sayfanın başı):", secondaryImageUrl || "not set");
-  console.log("About Schema Image URL (içerik bölümü):", aboutSchemaImageUrl || "not set");
+  devLog("Secondary Image URL (sayfanın başı):", secondaryImageUrl || "not set");
+  devLog("About Schema Image URL (içerik bölümü):", aboutSchemaImageUrl || "not set");
   
   const mission = aboutCPT?.acf?.mission || "";
   const aims = aboutCPT?.acf?.aims || "";
@@ -155,19 +162,19 @@ export default async function AboutPage() {
   const aimsList = aboutCPT?.acf?.aims_list || "";
   
   // Debug için ACF alanlarını kontrol et
-  console.log("About CPT ACF fields:", aboutCPT?.acf);
-  console.log("Mission Info (raw):", missionInfo);
-  console.log("Mission Info (type):", typeof missionInfo);
-  console.log("Mission Info (is string):", typeof missionInfo === 'string');
-  console.log("Mission Info (is empty):", missionInfo === '');
-  console.log("Mission Info (is null):", missionInfo === null);
-  console.log("Mission Info (is undefined):", missionInfo === undefined);
+  devLog("About CPT ACF fields:", aboutCPT?.acf);
+  devLog("Mission Info (raw):", missionInfo);
+  devLog("Mission Info (type):", typeof missionInfo);
+  devLog("Mission Info (is string):", typeof missionInfo === 'string');
+  devLog("Mission Info (is empty):", missionInfo === '');
+  devLog("Mission Info (is null):", missionInfo === null);
+  devLog("Mission Info (is undefined):", missionInfo === undefined);
   
   const supportingAHATitle = aboutCPT?.acf?.supporting_aha_title || "Supporting AHA Reference Sites";
   const supportingAHADescription = aboutCPT?.acf?.supporting_aha_description || "";
   
   // Debug için aims içeriğini kontrol et
-  console.log("Aims content:", aims);
+  devLog("Aims content:", aims);
   
   return (
     <PageHeader
@@ -210,7 +217,7 @@ export default async function AboutPage() {
       </Section>
 
       {/* Mission & Vision */}
-      <Section className="bg-slate-50" direction="right">
+      <Section id="mission" className="bg-blue-50 py-16" maxWidth="max-w-6xl">
         <div className="grid grid-cols-1 gap-8">
           <div className="p-8 rounded-lg">
             {/*<div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mb-6">
@@ -254,7 +261,7 @@ export default async function AboutPage() {
       </Section>
 
       {/* Supporting AHA Reference Sites - Title, Logo, Image */}
-      <Section id="supporting-aha" className="bgSectionColor" direction="left" maxWidth="max-w-none">
+      <Section id="supporting-aha" className="bgSectionColor" maxWidth="max-w-none">
         <div className="flex flex-col items-center py-12">
           {/* Title - Ortalanmış, belirli genişlik */}
           <div className="w-full max-w-4xl px-4 mb-6">
@@ -293,7 +300,7 @@ export default async function AboutPage() {
       )}
 
       {/* Executive Board Section */}
-      <Section id="executive-board" direction="up" className="bg-slate-50">
+      <Section id="executiveBoard">
         <p className="mb-4 headInfoTitle">{executiveBoard?.title?.rendered || "The Executive Board"}</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
           {executiveBoardMembers.map((member, index) => (
@@ -317,7 +324,7 @@ export default async function AboutPage() {
       </Section>
 
       {/* Secretariat Section */}
-      <Section id="secretariat" direction="left">
+      <Section id="secretariat">
         
         <p className="mb-4 headInfoTitle">{secretariat?.title?.rendered || "Secretariat"}</p>
 

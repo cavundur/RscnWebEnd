@@ -6,12 +6,13 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // WordPress API endpoint
-const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || 'http://rscn.local/wp-json/wp/v2';
+const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || 'http://cavundur.online/wp-json/wp/v2';
+//NEXT_PUBLIC_WORDPRESS_API_URL=https://cavundur.online/wp-json/wp/v2
 
 // WordPress API client
 const wpClient = axios.create({
   baseURL: API_URL,
-  timeout: 30000,
+  timeout: 60000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -20,12 +21,101 @@ const wpClient = axios.create({
   maxBodyLength: 50 * 1024 * 1024,
 });
 
+// Önbellek için basit bir cache mekanizması
+const cache = new Map<string, { data: any, timestamp: number }>();
+const CACHE_TTL = 10 * 60 * 1000; // 10 dakika (geliştirme için)
+const STALE_WHILE_REVALIDATE_TTL = 30 * 60 * 1000; // 30 dakika - eski veri kullanılabilir kalacak süre
+
+// Stale-while-revalidate strateji ile önbellekli API isteği
+async function cachedApiRequest(endpoint: string, params: any = {}, cacheKey?: string) {
+  const key = cacheKey || `${endpoint}:${JSON.stringify(params)}`;
+  const now = Date.now();
+  const cached = cache.get(key);
+  
+  // Önbellekte ve taze ise, doğrudan döndür
+  if (cached && (now - cached.timestamp) < CACHE_TTL) {
+    devLog(`[Fresh cache] for ${key}`);
+    return cached.data;
+  }
+  
+  // Önbellekte ama bayat ise, arka planda yenile ve eski veriyi döndür
+  if (cached && (now - cached.timestamp) < STALE_WHILE_REVALIDATE_TTL) {
+    devLog(`[Stale cache] for ${key}, revalidating in background`);
+    
+    // Arka planda yenile, promise beklemeden
+    revalidateCache(endpoint, params, key).catch(err => {
+      devLog(`Background revalidation error for ${key}:`, err);
+    });
+    
+    // Mevcut eski veriyi hemen döndür
+    return cached.data;
+  }
+  
+  // Önbellekte yoksa veya çok eski ise
+  try {
+    devLog(`[Cache miss] for ${key}, fetching from API`);
+    const response = await wpClient.get(endpoint, { params });
+    
+    // Sonucu önbelleğe al
+    cache.set(key, {
+      data: response.data,
+      timestamp: now
+    });
+    
+    return response.data;
+  } catch (error) {
+    // Hata durumunda, eğer varsa eski veriyi döndür
+    if (cached) {
+      devLog(`[Error recovery] for ${key}, using stale cache`);
+      return cached.data;
+    }
+    throw error;
+  }
+}
+
+// Arka planda önbelleği yenileme fonksiyonu
+async function revalidateCache(endpoint: string, params: any = {}, cacheKey: string) {
+  try {
+    const response = await wpClient.get(endpoint, { params });
+    
+    // Sonucu önbelleğe al
+    cache.set(cacheKey, {
+      data: response.data,
+      timestamp: Date.now()
+    });
+    
+    devLog(`[Background revalidated] for ${cacheKey}`);
+    return response.data;
+  } catch (error) {
+    devLog(`[Revalidation failed] for ${cacheKey}:`, error);
+    // Sessizce başarısız ol, mevcut önbellek korunacak
+    return null;
+  }
+}
+
+// Çoklu API isteği için paralel getirme yardımcı fonksiyonu
+export async function fetchParallel<T>(fetchers: Array<() => Promise<T>>): Promise<T[]> {
+  try {
+    return await Promise.all(fetchers.map(fetcher => 
+      fetcher().catch(error => {
+        console.error('Parallel fetch error:', error);
+        return null as unknown as T;
+      })
+    ));
+  } catch (error) {
+    console.error('fetchParallel error:', error);
+    return [];
+  }
+}
+
 // Hata yakalama için interceptor
 wpClient.interceptors.response.use(
   response => response,
   error => {
     if (error.code === 'ECONNREFUSED') {
-      console.error('WordPress API bağlantı hatası. WordPress çalışıyor mu?');
+      if (process.env.NODE_ENV !== 'production') {
+        console.error('WordPress API bağlantı hatası. WordPress çalışıyor mu?');
+      }
     }
     
     if (error.isAxiosError) {
@@ -36,7 +126,9 @@ wpClient.interceptors.response.use(
         statusText: error.response?.statusText,
         data: error.response?.data
       };
-      console.error('API Error:', errorDetails);
+      if (process.env.NODE_ENV !== 'production') {
+        console.error('API Error:', errorDetails);
+      }
     }
     
     return Promise.reject(error);
@@ -107,6 +199,15 @@ export interface Post {
       };
     }>;
   };
+}
+
+export interface ReferenceSite {
+  id: number;
+  slug: string;
+  title: string;
+  country: string; // 3 harfli ISO kodu
+  stars: number;
+  link?: string;
 }
 
 export interface Event extends Post {
@@ -259,25 +360,42 @@ export interface About {
   };
 }
 
+// Sadece geliştirme ortamında console.log kullanacak yardımcı fonksiyon
+const devLog = (message: string, ...data: any[]) => {
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(message, ...data);
+  }
+};
+
 // API Functions
 export async function getPages() {
+  const cacheKey = 'pages';
+  
   try {
-    const { data } = await wpClient.get('/pages', {
-      params: { per_page: 100, _embed: true },
-    });
-    return data;
+    // cachedApiRequest kullan
+    return await cachedApiRequest('/pages', { per_page: 100, _embed: true }, cacheKey);
   } catch (error) {
-    console.error('getPages error:', error);
+    if (process.env.NODE_ENV !== 'production') {
+      console.error('getPages error:', error);
+    }
     return [];
   }
 }
 
 export async function getPageBySlug(slug: string) {
+  if (!slug) return null;
+  
+  const cacheKey = `page:${slug}`;
+  
   try {
-    const { data } = await wpClient.get('/pages', {
-      params: { slug, _embed: true },
-    });
-    return data[0] || null;
+    // cachedApiRequest kullan ve ilk öğeyi döndür
+    const data = await cachedApiRequest('/pages', { slug, _embed: true }, cacheKey);
+    
+    if (Array.isArray(data) && data.length > 0) {
+      return data[0];
+    }
+    
+    return null;
   } catch (error) {
     console.error('getPageBySlug error:', error);
     return null;
@@ -286,46 +404,50 @@ export async function getPageBySlug(slug: string) {
 
 export async function getPosts(page = 1, category?: number, postType = 'posts') {
   try {
-    console.log('Fetching posts from:', `${API_URL}/${postType}`);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('Fetching posts from:', `${API_URL}/${postType}`);
+    }
     const params: any = { 
       per_page: PER_PAGE, 
       page, 
       _embed: 'wp:featuredmedia,wp:attachment,author',
       status: 'publish',
       acf_format: 'standard',
-      acf: true,
-      _fields: 'id,title,content,excerpt,slug,date,featured_media,acf,_embedded,_links'
+      acf: true
     };
     if (category) params.categories = category;
 
-    console.log('API request params:', params);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('API request params:', params);
+    }
     
     const { data, headers } = await wpClient.get(`/${postType}`, { params });
     
-    // Detaylı log ekle
-    console.log('Posts API Response Summary:', {
-      count: data?.length || 0,
-      totalPages: headers['x-wp-totalpages'],
-      hasData: data && data.length > 0
-    });
-    
-    // İlk 3 öğenin özetini göster
-    if (data && data.length > 0) {
-      console.log(`Preview of first ${Math.min(3, data.length)} items:`);
+    // Sadece geliştirme ortamında loglama yap
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('Posts API Response Summary:', {
+        count: data?.length || 0,
+        totalPages: headers['x-wp-totalpages'],
+        hasData: data && data.length > 0
+      });
       
-      for (let i = 0; i < Math.min(3, data.length); i++) {
-        const item = data[i];
-        console.log(`Item ${i+1} (ID: ${item.id}):`, {
-          title: item.title?.rendered?.substring(0, 30) + '...',
-          hasFeaturedMedia: !!item.featured_media,
-          featuredMediaId: item.featured_media,
-          hasEmbedded: !!item._embedded,
-          embeddedKeys: item._embedded ? Object.keys(item._embedded) : [],
-          hasFeaturedMediaEmbedded: !!item._embedded?.['wp:featuredmedia'],
-          featuredMediaEmbeddedCount: item._embedded?.['wp:featuredmedia']?.length || 0,
-          directImageUrl: item._embedded?.['wp:featuredmedia']?.[0]?.source_url || null,
-          mediaSizes: item._embedded?.['wp:featuredmedia']?.[0]?.media_details?.sizes ? Object.keys(item._embedded['wp:featuredmedia'][0].media_details.sizes) : []
-        });
+      // İlk 3 öğenin özetini göster
+      if (data && data.length > 0) {
+        console.log(`Preview of first ${Math.min(3, data.length)} items:`);
+        
+        for (let i = 0; i < Math.min(3, data.length); i++) {
+          const item = data[i];
+          console.log(`Item ${i+1} (ID: ${item.id}):`, {
+            title: item.title?.rendered?.substring(0, 30) + '...',
+            hasFeaturedMedia: !!item.featured_media,
+            featuredMediaId: item.featured_media,
+            hasEmbedded: !!item._embedded,
+            embeddedKeys: item._embedded ? Object.keys(item._embedded) : [],
+            hasFeaturedMediaEmbedded: !!item._embedded?.['wp:featuredmedia'],
+            featuredMediaEmbeddedCount: item._embedded?.['wp:featuredmedia']?.length || 0,
+            directImageUrl: item._embedded?.['wp:featuredmedia']?.[0]?.source_url || null
+          });
+        }
       }
     }
     
@@ -423,14 +545,39 @@ export async function getMediaById(id: number) {
 }
 
 export async function getProjects(page = 1) {
+  const cacheKey = `projects:page${page}`;
+  
   try {
-    const { data, headers } = await wpClient.get('/projects', {
-      params: { per_page: PER_PAGE, page, _embed: true },
-    });
-    return {
-      projects: data,
-      totalPages: parseInt(headers['x-wp-totalpages'] || '1', 10),
-      currentPage: page,
+    // Önce önbellekli API isteği mekanizmasını kullan
+    const data = await cachedApiRequest('/projects', { 
+      per_page: PER_PAGE, 
+      page, 
+      _embed: true 
+    }, cacheKey);
+    
+    // API yanıtını dönüştür
+    let totalPages = 1;
+    
+    if (Array.isArray(data) && data.length > 0) {
+      // headers bilgisi cachedApiRequest'ten gelmiyor, o yüzden tahmini hesaplama yapalım
+      totalPages = Math.ceil(data.length / PER_PAGE);
+      
+      // Eğer sayfa tam doluysa, muhtemelen daha fazla sayfa vardır
+      if (data.length === PER_PAGE) {
+        totalPages = Math.max(totalPages, page + 1);
+      }
+      
+      return {
+        projects: data,
+        totalPages: totalPages,
+        currentPage: page,
+      };
+    }
+    
+    return { 
+      projects: data || [], 
+      totalPages: totalPages, 
+      currentPage: page 
     };
   } catch (error) {
     console.error('getProjects error:', error);
@@ -439,19 +586,33 @@ export async function getProjects(page = 1) {
 }
 
 export async function getProjectBySlug(slug: string) {
+  if (!slug) {
+    devLog('getProjectBySlug called with empty slug');
+    return null;
+  }
+  
+  const cacheKey = `project:${slug}`;
+  
   try {
     // API parametrelerini oluştur
     const params = { 
       slug, 
       _embed: 'wp:featuredmedia,wp:attachment,author',
       _render: true,
-      acf_format: 'standard', // ACF verilerinin tüm yapısını al
-      acf: true, // ACF alanlarını ekleyin
-      _fields: 'id,title,content,excerpt,slug,date,featured_media,acf,_embedded,_links'
+      acf_format: 'standard',
+      acf: true
     };
     
-    const { data } = await wpClient.get('/projects', { params });
-    return data[0] || null;
+    // cachedApiRequest kullan
+    const data = await cachedApiRequest('/projects', params, cacheKey);
+    
+    // Eğer sonuç bir dizi ise, ilk öğeyi al
+    if (Array.isArray(data) && data.length > 0) {
+      return data[0];
+    }
+    
+    devLog(`No project found with slug: ${slug}`);
+    return null;
   } catch (error) {
     console.error('getProjectBySlug error:', error);
     return null;
@@ -664,6 +825,36 @@ export async function getServices() {
   }
 }
 
+/**
+ * WordPress Reference Sites API'den verileri çeker ve önbellek mekanizmasını kullanır
+ * @returns Promise<ReferenceSite[]> Reference site verileri
+ */
+export async function fetchReferenceSites(): Promise<ReferenceSite[]> {
+  const cacheKey = 'reference-sites';
+  
+  try {
+    // Önbellek mekanizmasını kullan
+    const data = await cachedApiRequest('/reference-sites', {
+      per_page: 100,
+      _embed: true,
+      _fields: 'id,title,slug,acf'
+    }, cacheKey);
+
+    // API'den dönen veriyi normalize et
+    return data.map((item: any) => ({
+      id: item.id,
+      slug: item.slug,
+      title: item.title?.rendered || "",
+      country: item.acf?.country || "",
+      stars: Number(item.acf?.stars_awarded) || 0,
+      link: item.acf?.external_link || undefined,
+    }));
+  } catch (error) {
+    console.error('Error fetching reference sites:', error);
+    return [];
+  }
+}
+
 const wpApi = {
   getPages,
   getPageBySlug,
@@ -682,6 +873,7 @@ const wpApi = {
   formatDate,
   getAbout,
   getServices,
+  fetchReferenceSites,
 };
 
 export default wpApi;
