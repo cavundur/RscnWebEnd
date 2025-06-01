@@ -113,6 +113,7 @@ export default async function ProjectDetailPage({ params }: Props) {
  * Statik parametreler için slug listesi döndürülür
  */
 export async function generateStaticParams() {
-  const projects = await wpApi.getProjects();
+  const projectsData = await wpApi.getProjects();
+  const projects = projectsData.projects || [];
   return projects.map((project: any) => ({ slug: project.slug }));
 } 

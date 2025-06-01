@@ -4,6 +4,7 @@ import Link from "next/link";
 import wpApi, { Event } from "@/lib/api/wordpress";
 import Section from "@/components/Section";
 import { notFound } from "next/navigation";
+import { convertToProxyUrl } from '@/lib/utils';
 
 export const revalidate = 3600; // Revalidate every hour
 
@@ -232,7 +233,7 @@ function renderGallerySection(event: any) {
                   return (
                     <div key={`${fieldName}-${index}`} className="aspect-square relative rounded-lg overflow-hidden">
                       <Image
-                        src={imageUrl}
+                        src={convertToProxyUrl(imageUrl)}
                         alt={imageAlt}
                         fill
                         className="object-cover hover:scale-105 transition-transform duration-300"
@@ -259,7 +260,7 @@ function renderGallerySection(event: any) {
               return (
                 <div key={`attachment-${index}`} className="aspect-square relative rounded-lg overflow-hidden">
                   <Image
-                    src={attachment.source_url}
+                    src={convertToProxyUrl(attachment.source_url)}
                     alt={attachment.alt_text || attachment.title?.rendered || 'Attachment image'}
                     fill
                     className="object-cover hover:scale-105 transition-transform duration-300"
@@ -398,7 +399,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
               {hasFeaturedImage && featuredImageUrl && (
                 <div className="aspect-video relative w-full mb-8 rounded-lg overflow-hidden">
                   <Image
-                    src={featuredImageUrl}
+                    src={convertToProxyUrl(featuredImageUrl)}
                     alt={featuredImageAlt}
                     fill
                     className="object-cover"

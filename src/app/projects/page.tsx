@@ -4,6 +4,7 @@ import wpApi from "@/lib/api/wordpress";
 import Section from "@/components/Section";
 import PageHeader from "@/components/PageHeader";
 import DOMPurify from 'isomorphic-dompurify';
+import { convertToProxyUrl } from '@/lib/utils';
 
 export const revalidate = 3600; // Her saat yeniden oluştur
 
@@ -20,7 +21,8 @@ function getShortText(html: string, maxLength = 180): string {
 }
 
 export default async function ProjectsPage() {
-  const projects = await wpApi.getProjects();
+  const projectsData = await wpApi.getProjects();
+  const projects = projectsData.projects || [];
   
   // Projects ana sayfa verisini çek
   const projectsPage = await wpApi.getPageBySlug("projects-page");
@@ -84,7 +86,7 @@ export default async function ProjectsPage() {
       const media = await wpApi.getMediaById(project.featured_media);
       url = media?.source_url || null;
     }
-    return url;
+    return convertToProxyUrl(url);
   }));
 
   return (

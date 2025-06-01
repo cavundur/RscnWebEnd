@@ -84,7 +84,7 @@ export default function PageHeader({
       <div className={styles.pageImageContainer}>
         {imageUrl ? (
           <Image
-            src={imageUrl ? convertToProxyUrl(imageUrl) : '/images/placeholder/hero.jpg'}
+            src={imageUrl ? convertToProxyUrl(imageUrl) : '/images/placeholder/hero.png'}
             alt={imageAlt}
             fill
             priority

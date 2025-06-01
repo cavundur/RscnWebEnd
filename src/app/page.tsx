@@ -52,6 +52,7 @@ export default async function HomePage() {
     
     // Events verileri çek
     const eventsData = await wpApi.getEvents();
+    const events = eventsData.events || [];
     
     // News verileri çek - hem standart posts hem de news post type'ını kontrol et
     const newsResponse = await wpApi.getPosts(1);
@@ -71,7 +72,7 @@ export default async function HomePage() {
     }
     
     // Her event post'una type: 'events' ekle
-    const eventsWithType = eventsData?.map((event: WPPost) => ({
+    const eventsWithType = events.map((event: WPPost) => ({
       ...event,
       itemType: 'events' // Tip bilgisini ekle
     })) || [];
@@ -117,7 +118,7 @@ export default async function HomePage() {
     // Hero Image Data
     const heroImageId = acf.hero_image;
     const heroImageDataFromApi = heroImageId ? await wpApi.getMediaById(Number(heroImageId)) : null;
-    const featuredImageUrl = heroImageDataFromApi?.source_url || "/images/placeholder/hero.jpg";
+    const featuredImageUrl = heroImageDataFromApi?.source_url || "/images/placeholder/hero.png";
     const heroImageAlt = heroImageDataFromApi?.alt_text || acf.hero_image?.alt || acf.hero_title || defaultTitle;
 
     // İletişim Bölümü ACF Alanları
@@ -171,7 +172,8 @@ export default async function HomePage() {
     const aboutSectionDescription = acf.about_description_s || "<p>Default description about our network. This content can be managed from WordPress.</p>";
 
     // Projeleri çek
-    const allProjects = await wpApi.getProjects();
+    const allProjectsData = await wpApi.getProjects();
+    const allProjects = allProjectsData.projects || [];
     // Görsel bulma algoritması (projects/page.tsx ile aynı)
     const projects = await Promise.all(
       allProjects.slice(0, 3).map(async (project: any) => {
@@ -207,7 +209,6 @@ export default async function HomePage() {
         homePageData={homePage}
         eventsData={sortedItems}
         aboutSectionCardsData={aboutSectionCardsData}
-        aboutSectionBackgroundImageUrl={aboutSectionBackgroundImageUrl}
         aboutSectionTitle={aboutSectionTitle}
         aboutSectionDescription={aboutSectionDescription}
         contactSectionTitle={contactSectionTitle}
@@ -237,7 +238,7 @@ export default async function HomePage() {
         <PageHeader
           title="Error"
           description="An error occurred while loading the page."
-          imageUrl="/images/placeholder/hero.jpg"
+          imageUrl="/images/placeholder/hero.png"
           imageAlt="Error Image"
           titleContainerClassName="text-left"
           variant="home"

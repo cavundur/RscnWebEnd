@@ -3,6 +3,7 @@ import Link from "next/link";
 import wpApi, { Post } from "@/lib/api/wordpress";
 import Section from "@/components/Section";
 import PageHeader from "@/components/PageHeader";
+import { convertToProxyUrl } from '@/lib/utils';
 
 export const revalidate = 3600; // Her saat yeniden oluştur
 
@@ -342,7 +343,7 @@ export default async function NewsPage() {
                       {imageUrl ? (
                       <div className="relative w-full h-56">
                         <Image
-                          src={imageUrl}
+                          src={convertToProxyUrl(imageUrl)}
                           alt={item.acf?.news_title || item.title.rendered}
                           fill
                           className="object-cover"

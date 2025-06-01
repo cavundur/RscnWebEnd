@@ -422,15 +422,19 @@ export async function getMediaById(id: number) {
   }
 }
 
-export async function getProjects() {
+export async function getProjects(page = 1) {
   try {
-    const { data } = await wpClient.get('/projects', {
-      params: { per_page: 100, _embed: true },
+    const { data, headers } = await wpClient.get('/projects', {
+      params: { per_page: PER_PAGE, page, _embed: true },
     });
-    return data;
+    return {
+      projects: data,
+      totalPages: parseInt(headers['x-wp-totalpages'] || '1', 10),
+      currentPage: page,
+    };
   } catch (error) {
     console.error('getProjects error:', error);
-    return [];
+    return { projects: [], totalPages: 0, currentPage: page };
   }
 }
 
@@ -454,15 +458,19 @@ export async function getProjectBySlug(slug: string) {
   }
 }
 
-export async function getEvents() {
+export async function getEvents(page = 1) {
   try {
-    const { data } = await wpClient.get('/events', {
-      params: { per_page: 100, _embed: true },
+    const { data, headers } = await wpClient.get('/events', {
+      params: { per_page: PER_PAGE, page, _embed: true },
     });
-    return data;
+    return {
+      events: data,
+      totalPages: parseInt(headers['x-wp-totalpages'] || '1', 10),
+      currentPage: page,
+    };
   } catch (error) {
     console.error('getEvents error:', error);
-    return [];
+    return { events: [], totalPages: 0, currentPage: page };
   }
 }
 
