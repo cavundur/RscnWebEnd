@@ -217,7 +217,7 @@ export default async function AboutPage() {
       </Section>
 
       {/* Mission & Vision */}
-      <Section id="mission" className="bg-blue-50 py-16" maxWidth="max-w-6xl">
+      <Section id="mission" className="bg-blue-50 py-16" maxWidth="max-w-4xl">
         <div className="grid grid-cols-1 gap-8">
           <div className="p-8 rounded-lg">
             {/*<div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mb-6">

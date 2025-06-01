@@ -6,6 +6,7 @@ import PageHeader from "@/components/PageHeader";
 import Section from "@/components/Section";
 import Image from "next/image"; // Örnek için eklendi, gerekirse kullanılabilir
 import AhaReferenceClient from '@/components/AhaReferenceClient';
+import styles from './page.module.scss';
 
 // export const revalidate = 10; // Gerekirse revalidate süresi eklenebilir
 
@@ -68,123 +69,87 @@ export default async function AhaReferencePage() {
         imageAlt={`${pageTitle} Header Image`}
         titleContainerClassName="pageHeaderTitle"
       />
-      <Section>
+
         {/* AHA Reference Sayfasının Ana İçeriği Buraya Gelecek */}
-        <Section id="aha-introduction" isFirst={true}>
-          <div className="container mx-auto px-4 py-8">
-            <h2 className="text-3xl font-bold mb-4">Introduction to AHA Reference Sites</h2>
+        <Section id="aha-introduction" isFirst={true} className={styles.ahaIntroduction}>
+          <div className={`${styles.ahaIntroductionContent} container mx-auto px-4 py-8`}>
+            <h2 className={`${styles.textHeader} text-3xl font-bold mb-4`}>What are AHA Reference Sites?</h2>
             <p className="text-lg text-slate-700 mb-4">
-              The European Innovation Partnership on Active and Healthy Ageing (EIP on AHA) is a pilot initiative launched by the European Commission to foster innovation and digital transformation in the field of active and healthy ageing.
+            AHA References Sites will have adopted a ”Quadruple Helix” model to ensure all stakeholders:
             </p>
+            <ul className="list-disc list-inside text-lg text-slate-700 space-y-2">
+              <li>
+                <p className="text-lg text-slate-700">
+                have a common understanding of the organisational, technical and financial challenges facing the region or area within health and care, and active and healthy ageing;
+                </p>
+              </li>
+              <li>
+                <p className="text-lg text-slate-700">
+                are working collaboratively to define and implement innovative solutions for improving patient and service user outcomes, increasing the sustainability of health and care systems, and creating economic growth and jobs.
+                </p>
+              </li>
+            </ul>
             <p className="text-lg text-slate-700">
-              Reference Sites are regions, cities, integrated hospitals or care organisations that have demonstrated excellence in the development, adoption, and scaling-up of innovative practices for active and healthy ageing.
+            The lead authority for health and social care in the region is a fundamental stakeholder in the AHA Reference Site.
             </p>
+          </div>
+          <div className={`${styles.ahaIntroductionImage} container mx-auto px-4 py-8`}>
+            <Image src="/images/aha-reference.png" alt="AHA Reference Sites" width={1000} height={1000} />
           </div>
         </Section>
 
-        <Section id="aha-criteria" className="bg-slate-50">
-          <div className="container mx-auto px-4 py-8">
-            <h2 className="text-3xl font-bold mb-4">Criteria for Reference Sites</h2>
-            <p className="text-lg text-slate-700 mb-4">
-              To become a Reference Site, applicants must demonstrate a comprehensive, innovation-led approach to active and healthy ageing, with a focus on:
-            </p>
-            <ul className="list-disc list-inside text-lg text-slate-700 space-y-2">
-              <li>Impact and sustainability of the innovative practices.</li>
-              <li>Scalability and replicability of the solutions.</li>
-              <li>Strong stakeholder engagement and co-creation.</li>
-              <li>Evidence-based outcomes and a robust monitoring framework.</li>
-            </ul>
+        <Section id="aha-criteria" className={`${styles.ahaIntroduction} bg-slate-50`}>
+          <div className="head-info container mx-auto px-4 py-8">
+
+            <div className="prose max-w-none text-slate-700 mb-4 head-info" >Why Become an AHA Reference Site?</div>
+              <div className="head-info-line"></div>
+              <div className="prose max-w-none text-slate-700 mission-content">
+              <ul className="list-disc list-inside text-lg text-slate-700 space-y-2">
+                <li>
+                  <p className="text-lg text-slate-700">
+                  Opportunity to become a catalyst in your region, bringing other stakeholders on board to work collaboratively on the development of innovative and digital solutions to address a life-course approach to active and healthy ageing
+                  </p>
+                </li>
+                <li>
+                  <p className="text-lg text-slate-700">
+                  Opportunity to scale up AHA/AHL service delivery models and innovative and digital solutions by ensuring providers are able to adopt innovative practices through capacity building
+                  </p>
+                </li>
+                <li>
+                  <p className="text-lg text-slate-700">
+                  Internationalisation and networking within an innovative community of accredited AHA Reference Sites
+                  </p>
+                </li>
+                <li>
+                  <p className="text-lg text-slate-700">
+                  Internal regional system’s development and evolution through mutual learning
+                  </p>
+                </li>
+                <li>
+                  <p className="text-lg text-slate-700">
+                  Enhanced strategic oversight and direction to supporting regional and national policies and plans for life-course approaches to active and healthy ageing
+                  </p>
+                </li>
+                <li>
+                  <p className="text-lg text-slate-700">
+                  Contribute to the development of Regional Strategies for Innovation, Economic Development, Regional Development, and Smart Specialisation, etc
+                  </p>
+                </li>
+                <li>
+                  <p className="text-lg text-slate-700">
+                  Credibility to develop consortia and proposals for EC funding programmes that complement and accelerate transfer and scaling up activities within and across regions
+                  </p>
+                </li>
+                
+              </ul>
+              </div>
+            
           </div>
         </Section>
 
-        <Section id="aha-benefits">
-          <div className="container mx-auto px-4 py-8">
-            <h2 className="text-3xl font-bold mb-4">Benefits of Being a Reference Site</h2>
-            <p className="text-lg text-slate-700 mb-4">
-              Becoming a Reference Site offers numerous benefits, including:
-            </p>
-            <ul className="list-disc list-inside text-lg text-slate-700 space-y-2">
-              <li>Increased visibility and recognition at European level.</li>
-              <li>Opportunities for networking and collaboration with other leading regions.</li>
-              <li>Access to funding opportunities and support for innovation.</li>
-              <li>Contribution to policy development and the European agenda on active and healthy ageing.</li>
-            </ul>
-          </div>
-        </Section>
-      </Section>
+     
       {/* Reference Sites item'larını listele */}
-      <Section id="reference-sites-list" className="bg-slate-50">
-        <h2 className="text-2xl font-bold mb-6">Reference Sites</h2>
-        <div className="grid">
-          {referenceSites.length === 0 && (
-            <div className="col-span-full text-center text-slate-500">No reference sites found.</div>
-          )}
-          {referenceSites.map((item: any, idx: number) => (
-            <div key={item.id} className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-xl font-semibold mb-2">{item.title?.rendered}</h3>
-              {/* Ülkeler */}
-              {item.acf?.country && (
-                <div className="mb-2">
-                  <strong>Country:</strong> {Array.isArray(item.acf.country) ? item.acf.country.join(', ') : item.acf.country}
-                </div>
-              )}
-              {/* Yıldız */}
-              {item.acf?.stars_awarded && (
-                <div className="mb-2">
-                  <strong>Stars Awarded:</strong> {item.acf.stars_awarded}
-                </div>
-              )}
-              {/* Dış link */}
-              {item.acf?.external_link && typeof item.acf.external_link === 'object' && (
-                <div className="mb-2">
-                  <strong>External Link:</strong>{' '}
-                  <a
-                    href={item.acf.external_link.url}
-                    target={item.acf.external_link.target || '_blank'}
-                    rel="noopener noreferrer"
-                    className="text-blue-600 underline"
-                  >
-                    {item.acf.external_link.title || item.acf.external_link.url}
-                  </a>
-                </div>
-              )}
-              {item.acf?.external_link && typeof item.acf.external_link === 'string' && (
-                <div className="mb-2">
-                  <strong>External Link:</strong>{' '}
-                  <a
-                    href={item.acf.external_link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 underline"
-                  >
-                    {item.acf.external_link}
-                  </a>
-                </div>
-              )}
-              {/* Map Image */}
-              {mapImageUrls[idx] && (
-                <div className="mb-2">
-                  <strong>Map Image:</strong><br />
-                  <img src={mapImageUrls[idx]} alt="Map" className="rounded w-full max-h-40 object-contain" />
-                </div>
-              )}
-              {/* Açıklama alanları */}
-              {item.acf?.description && (
-                <div className="text-slate-700 mb-2" dangerouslySetInnerHTML={{ __html: item.acf.description }} />
-              )}
-              {item.acf?.reference_sites_description && (
-                <div className="text-slate-700 mb-2" dangerouslySetInnerHTML={{ __html: item.acf.reference_sites_description }} />
-              )}
-              {item.content?.rendered && (
-                <div className="text-slate-700 mb-2" dangerouslySetInnerHTML={{ __html: item.content.rendered }} />
-              )}
-              {item.excerpt?.rendered && (
-                <div className="text-slate-500 mb-2" dangerouslySetInnerHTML={{ __html: item.excerpt.rendered }} />
-              )}
-            </div>
-          ))}
-        </div>
-      </Section>
+      
       {/* Yeni client component ile harita ve liste */}
       <AhaReferenceClient projects={referenceSites} />
     </>
