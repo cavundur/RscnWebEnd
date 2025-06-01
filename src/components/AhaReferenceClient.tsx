@@ -86,6 +86,9 @@ const SAMPLE_PROJECTS: Project[] = [
 const AhaReferenceClient = ({ projects }: AhaReferenceClientProps) => {
   const [selectedCountry, setSelectedCountry] = useState<string | undefined>();
   const [processedProjects, setProcessedProjects] = useState<Project[]>(SAMPLE_PROJECTS);
+  const [countryFilter, setCountryFilter] = useState<string>("");
+  const [projectFilter, setProjectFilter] = useState<string>("");
+  const [starFilter, setStarFilter] = useState<number | "">("");
 
   useEffect(() => {
     if (projects && projects.length > 0) {
@@ -118,6 +121,22 @@ const AhaReferenceClient = ({ projects }: AhaReferenceClientProps) => {
     }
   }, [projects]);
 
+  // Filtrelenmiş projeler
+  const filteredProjects = processedProjects.filter(project => {
+    const countryMatch = countryFilter ? project.country === countryFilter : true;
+    const projectMatch = projectFilter ? project.title.toLowerCase().includes(projectFilter.toLowerCase()) : true;
+    const starMatch = starFilter ? project.rating === starFilter : true;
+    const selectedCountryMatch = selectedCountry ? project.country === selectedCountry : true;
+    return countryMatch && projectMatch && starMatch && selectedCountryMatch;
+  });
+
+  const handleClearFilters = () => {
+    setCountryFilter("");
+    setProjectFilter("");
+    setStarFilter("");
+    setSelectedCountry(undefined);
+  };
+
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold mb-8">AHA Reference Sites</h1>
@@ -130,8 +149,34 @@ const AhaReferenceClient = ({ projects }: AhaReferenceClientProps) => {
           />
         </div>
         <div className="lg:col-span-2">
+          {/* Filtre Barı */}
+          <div className="flex flex-wrap gap-4 mb-4 items-end">
+            <div>
+              <label className="block text-sm font-medium mb-1">Ülke</label>
+              <select value={countryFilter} onChange={e => setCountryFilter(e.target.value)} className="border rounded px-2 py-1">
+                <option value="">Tümü</option>
+                {[...new Set(processedProjects.map(p => p.country))].map(code => (
+                  <option key={code} value={code}>{code}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Proje Adı</label>
+              <input type="text" value={projectFilter} onChange={e => setProjectFilter(e.target.value)} className="border rounded px-2 py-1" placeholder="Proje adı ara..." />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Yıldız</label>
+              <select value={starFilter} onChange={e => setStarFilter(e.target.value ? Number(e.target.value) : "")} className="border rounded px-2 py-1">
+                <option value="">Tümü</option>
+                {[5,4,3,2,1].map(star => (
+                  <option key={star} value={star}>{star}</option>
+                ))}
+              </select>
+            </div>
+            <button onClick={handleClearFilters} className="ml-2 px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Tümünü Göster</button>
+          </div>
           <ProjectList
-            projects={processedProjects}
+            projects={filteredProjects}
             selectedCountry={selectedCountry}
           />
         </div>

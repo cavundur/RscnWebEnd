@@ -39,6 +39,7 @@ const WorldMap = ({ projects, onCountrySelect, selectedCountry }: WorldMapProps)
   const [center, setCenter] = useState<[number, number]>([15, 45]);
   const [popupPosition, setPopupPosition] = useState<{ x: number; y: number } | null>(null);
   const [internalSelectedCountry, setInternalSelectedCountry] = useState<string | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Seçili ülke state'i: dışarıdan geliyorsa onu, yoksa internal state'i kullan
   const activeCountry = selectedCountry ?? internalSelectedCountry;
@@ -56,9 +57,9 @@ const WorldMap = ({ projects, onCountrySelect, selectedCountry }: WorldMapProps)
     [projects]
   );
 
-  // Seçili ülkenin projelerini bul (numeric koddan alpha-3'e dön)
+  // Seçili ülkenin projelerini bul (alpha-3 kodu ile)
   const selectedProjects = activeCountry
-    ? projects.filter(p => alpha3ToNumeric[p.country] === activeCountry)
+    ? projects.filter(p => p.country === activeCountry)
     : [];
 
   // Ülke koduna göre en yüksek rating'i bul ve renklendir
@@ -103,12 +104,12 @@ const WorldMap = ({ projects, onCountrySelect, selectedCountry }: WorldMapProps)
       if (popup && !popup.contains(e.target as Node)) {
         setInternalSelectedCountry(null);
         setPopupPosition(null);
-        if (onCountrySelect) onCountrySelect('');
+        // onCountrySelect çağrılmayacak, filtre açık kalacak
       }
     };
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
-  }, [activeCountry, onCountrySelect]);
+  }, [activeCountry]);
 
   useEffect(() => {
     // Debug için: Ülke rating map ve projeler
@@ -123,17 +124,26 @@ const WorldMap = ({ projects, onCountrySelect, selectedCountry }: WorldMapProps)
     setCenter([15, 45]);
   };
 
-  // Ülkeye tıklanınca popup'ı mouse pozisyonunda aç
+  // Ülkeye tıklanınca popup'ı container'a göre mouse pozisyonunda aç
   const handleCountryClick = (geo: any, evt: any) => {
     if (countriesWithProjects.includes(geo.id)) {
       setInternalSelectedCountry(geo.id);
-      setPopupPosition({ x: evt.clientX, y: evt.clientY });
-      if (onCountrySelect) onCountrySelect(geo.id);
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        setPopupPosition({
+          x: evt.clientX - rect.left,
+          y: evt.clientY - rect.top
+        });
+      } else {
+        setPopupPosition({ x: evt.clientX, y: evt.clientY });
+      }
+      const alpha3 = Object.keys(alpha3ToNumeric).find(key => alpha3ToNumeric[key] === geo.id);
+      if (onCountrySelect && alpha3) onCountrySelect(alpha3);
     }
   };
 
   return (
-    <div className="relative w-full h-[600px] bg-white rounded-lg shadow-lg overflow-hidden">
+    <div ref={containerRef} className="relative w-full h-[600px] bg-white rounded-lg shadow-lg overflow-hidden">
       {/* <div className="absolute top-4 left-4 z-10 bg-white bg-opacity-80 p-2 rounded shadow">
         <h3 className="text-sm font-bold mb-1">AHA Reference Sites</h3>
         <div className="flex items-center text-xs mb-1">
@@ -235,7 +245,7 @@ const WorldMap = ({ projects, onCountrySelect, selectedCountry }: WorldMapProps)
       {activeCountry && popupPosition && (
         <div
           id="country-popup"
-          className={`${styles.countryPopup} fixed z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-4 min-w-[220px] max-w-[320px]`}
+          className={`${styles.countryPopup} absolute z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-4 min-w-[220px] max-w-[320px]`}
           style={{ left: popupPosition.x + 10, top: popupPosition.y + 10 }}
         >
           <div className={`${styles.countryPopupHeader} flex justify-between items-center mb-2`}>

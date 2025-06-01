@@ -52,53 +52,27 @@ const ProjectList = ({ projects, selectedCountry }: ProjectListProps) => {
     : projects;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="flex flex-col gap-4">
       {filteredProjects.length > 0 ? (
         filteredProjects.map((project) => (
-          <Card key={project.id} className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <CardTitle className="text-lg">{getRenderedString(project.title)}</CardTitle>
-              <div className="flex items-center gap-1">
-                {[...Array(5)].map((_, index) => (
-                  <Star
-                    key={index}
-                    className={`w-4 h-4 ${
-                      index < project.rating
-                        ? 'fill-yellow-400 text-yellow-400'
-                        : 'text-gray-300'
-                    }`}
-                  />
-                ))}
-              </div>
-              <div className="flex items-center text-gray-500 mt-1">
-                <MapPin className="w-4 h-4 mr-1" />
-                <span className="text-sm">{COUNTRY_NAMES[project.country] || project.country}</span>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div
-                className="prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: getRenderedString(project.description) }}
-              />
-              {project.images && project.images.length > 0 && (
-                <div className="mt-4 grid grid-cols-2 gap-2">
-                  {project.images.map((image, index) => (
-                    <img
-                      key={index}
-                      src={image}
-                      alt={`${project.title} - Image ${index + 1}`}
-                      className="w-full h-32 object-cover rounded-lg"
-                    />
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
+          <div key={project.id} className="flex flex-row items-center border rounded-lg p-4 bg-white shadow-sm">
+            {/* Ülke ismi */}
+            <div className="w-32 font-semibold text-gray-700">{COUNTRY_NAMES[project.country] || project.country}</div>
+            {/* Proje ismi */}
+            <div className="flex-1 font-bold text-lg text-blue-700">{getRenderedString(project.title)}</div>
+            {/* Yıldızlar */}
+            <div className="flex items-center gap-1">
+              {[...Array(5)].map((_, index) => (
+                <Star
+                  key={index}
+                  className={`w-5 h-5 ${index < project.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                />
+              ))}
+            </div>
+          </div>
         ))
       ) : (
-        <div className="lg:col-span-3 text-center py-10">
-          <p className="text-gray-500">Bu ülkede proje bulunamadı</p>
-        </div>
+        <div className="text-gray-500 text-center py-8">Bu kriterlere uygun proje bulunamadı.</div>
       )}
     </div>
   );
